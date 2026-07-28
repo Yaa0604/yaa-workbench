@@ -32,6 +32,8 @@ body{background:var(--bg);color:var(--ink);display:flex;min-height:100vh}
 .nav-item.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(224,88,154,.35)}
 .nav-item .ico{font-size:17px;width:22px;text-align:center}
 .side-tip{margin-top:26px;padding:14px;background:var(--gold-soft);border-radius:12px;font-size:12px;color:#9a7d3f;line-height:1.7}
+.side-export{display:block;margin-top:14px;padding:8px 4px;font-size:12px;color:var(--ink2);opacity:.5;cursor:pointer;text-decoration:none;text-align:center;transition:.18s}
+.side-export:hover{opacity:.85;color:var(--accent)}
 /* ---------- 汉堡按钮 + 遮罩（抽屉导航） ---------- */
 .hamburger{position:fixed;top:14px;left:14px;z-index:60;width:46px;height:46px;border:none;border-radius:13px;background:var(--accent);box-shadow:0 5px 16px rgba(224,88,154,.38);cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:0;-webkit-tap-highlight-color:transparent}
 .hamburger span{display:block;width:21px;height:2.6px;background:#fff;border-radius:3px;transition:.25s}
@@ -237,6 +239,7 @@ details.tpl .tpl-body{margin-top:10px;color:var(--ink2);line-height:1.9;white-sp
   <div class="nav-item" data-pg="quotes"><span class="ico">💛</span><span class="txt">我的语句库</span></div>
   <div class="nav-item" data-pg="focus"><span class="ico">🎯</span><span class="txt">专注力提升</span></div>
   <div class="side-tip">💡 热点与爆款数据基于 2026年7月下旬。想更新时，直接让 WorkBuddy 重新爬一轮即可。</div>
+  <a class="side-export" onclick="exportData();toggleNav(false)">⤓ 导出数据备份</a>
 </div>
 
 <div class="main">
