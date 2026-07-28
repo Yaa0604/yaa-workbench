@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffecf4"/>
+      <stop offset="1" stop-color="#ffb2ce"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <g fill="#ff8fb1">
+    <!-- 左环（收窄） -->
+    <path d="M256 222 C180 150 150 180 148 238 C150 300 180 330 256 282 Z"/>
+    <!-- 右环（收窄，镜像） -->
+    <path d="M256 222 C332 150 362 180 364 238 C362 300 332 330 256 282 Z"/>
+    <!-- 左绸带（纤细） -->
+    <path d="M250 282 L266 286 L261 452 L250 430 L239 452 Z"/>
+    <!-- 右绸带（纤细） -->
+    <path d="M262 282 L246 286 L251 452 L262 430 L273 452 Z"/>
+  </g>
+  <!-- 高光 -->
+  <ellipse cx="186" cy="212" rx="10" ry="22" fill="#ffcade"/>
+  <ellipse cx="326" cy="212" rx="10" ry="22" fill="#ffcade"/>
+  <!-- 中心结 -->
+  <ellipse cx="256" cy="256" rx="23" ry="38" fill="#ff5f97"/>
+  <ellipse cx="246" cy="246" rx="8" ry="12" fill="#ff90b6"/>
+</svg>

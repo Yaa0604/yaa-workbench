@@ -1,0 +1,15 @@
+{
+  "name": "牙牙工作台",
+  "short_name": "牙牙工作台",
+  "description": "牙牙工作台 · 短视频创作者的一体化空间：每日任务、抖音热点、带货中心、体态跟练、体重管理、每日阅读与专注力提升",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff5f8",
+  "theme_color": "#ff8fb1",
+  "orientation": "portrait",
+  "icons": [
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"},
+    {"src": "icon-192.png", "type": "image/png", "sizes": "192x192"},
+    {"src": "icon-512.png", "type": "image/png", "sizes": "512x512"}
+  ]
+}
