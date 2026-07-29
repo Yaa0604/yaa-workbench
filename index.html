@@ -2,622 +2,438 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>牙牙工作台</title>
-<meta name="theme-color" content="#ff8fb1">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="牙牙工作台">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#bfe0ef">
+<title>牙牙的工作台</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
 :root{
-  --bg:#faf7f2; --card:#ffffff; --ink:#3d3229; --ink2:#8a7d6f;
-  --accent:#ff8fb1; --accent-soft:#ffe9f0; --accent2:#c98bd9; --accent2-soft:#f3e9fa;
-  --gold:#d9a441; --gold-soft:#faf3e3; --blue:#5a7fa8; --blue-soft:#eaf1f8;
-  --pink:#ff8fb1; --pink-soft:#ffe9f0; --line:#f0e3ea;
-  --shadow:0 2px 12px rgba(90,70,50,.07); --radius:16px;
+  --bg:#f3f8fc; --bg2:#eef5fb;
+  --card:#ffffff;
+  --blue:#bfe0ef; --blue-soft:#e9f4fa; --blue-deep:#7fb8d6;
+  --pink:#f8d7e3; --pink-soft:#fdeef4; --pink-deep:#eaa6c2;
+  --text:#5c6b7a; --text-soft:#9aabba; --line:#eef2f7;
+  --accent:#8fc6e0; --accent2:#f3b3cd;
+  --radius:22px; --radius-s:14px;
+  --shadow:0 8px 26px rgba(150,185,215,.20);
+  --shadow-s:0 3px 12px rgba(150,185,215,.16);
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif}
-body{background:var(--bg);color:var(--ink);display:flex;min-height:100vh}
-::selection{background:#ffd9e6}
-/* ---------- 侧边栏 ---------- */
-.sidebar{width:240px;background:#fff;border-right:1px solid var(--line);padding:24px 14px;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:55;transform:translateX(-100%);transition:transform .25s ease;box-shadow:4px 0 24px rgba(120,40,90,.14)}
-.sidebar.open{transform:translateX(0)}
-.logo{font-size:20px;font-weight:800;padding:0 12px 20px;letter-spacing:1px}
-.logo span{color:var(--accent)}
-.nav-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:12px;cursor:pointer;color:var(--ink2);font-size:14.5px;font-weight:500;margin-bottom:4px;transition:.18s}
-.nav-item:hover{background:var(--accent-soft);color:var(--accent)}
-.nav-item.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(224,88,154,.35)}
-.nav-item .ico{font-size:17px;width:22px;text-align:center}
-.side-tip{margin-top:26px;padding:14px;background:var(--gold-soft);border-radius:12px;font-size:12px;color:#9a7d3f;line-height:1.7}
-.side-export{display:block;margin-top:14px;padding:8px 4px;font-size:12px;color:var(--ink2);opacity:.5;cursor:pointer;text-decoration:none;text-align:center;transition:.18s}
-.side-export:hover{opacity:.85;color:var(--accent)}
-/* ---------- 汉堡按钮 + 遮罩（抽屉导航） ---------- */
-.hamburger{position:fixed;top:14px;left:14px;z-index:60;width:46px;height:46px;border:none;border-radius:13px;background:var(--accent);box-shadow:0 5px 16px rgba(224,88,154,.38);cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:0;-webkit-tap-highlight-color:transparent}
-.hamburger span{display:block;width:21px;height:2.6px;background:#fff;border-radius:3px;transition:.25s}
-.hamburger.open span:nth-child(1){transform:translateY(7.6px) rotate(45deg)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,"PingFang SC","Helvetica Neue",Helvetica,"Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--text);
+  font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:480px;margin:0 auto;min-height:100vh;position:relative;background:var(--bg);padding-bottom:30px}
+
+/* ===== 顶栏 ===== */
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:12px;
+  padding:14px 16px;padding-top:calc(14px + env(safe-area-inset-top));
+  background:rgba(243,248,252,.86);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line)}
+.hamburger{width:40px;height:40px;border-radius:13px;border:none;background:var(--blue-soft);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;cursor:pointer;flex:0 0 auto}
+.hamburger span{display:block;width:18px;height:2px;border-radius:2px;background:var(--blue-deep);transition:.25s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .hamburger.open span:nth-child(2){opacity:0}
-.hamburger.open span:nth-child(3){transform:translateY(-7.6px) rotate(-45deg)}
-.scrim{position:fixed;inset:0;background:rgba(60,20,45,.34);z-index:54;opacity:0;visibility:hidden;transition:.25s}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.logo{font-size:19px;font-weight:700;color:var(--text);letter-spacing:.5px}
+.logo small{font-size:11px;color:var(--text-soft);font-weight:400;margin-left:6px}
+.top-date{margin-left:auto;font-size:12px;color:var(--text-soft)}
+
+/* ===== 遮罩 + 侧边栏 ===== */
+.scrim{position:fixed;inset:0;background:rgba(70,90,110,.28);opacity:0;visibility:hidden;transition:.28s;z-index:50}
 .scrim.show{opacity:1;visibility:visible}
-/* ---------- 主区 ---------- */
-.main{margin-left:0;flex:1;padding:74px 36px 60px;max-width:1200px}
-.page{display:none}
-.page.show{display:block;animation:fadein .3s}
-@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-h1.pg{font-size:24px;font-weight:800;margin-bottom:4px}
-p.sub{color:var(--ink2);font-size:13.5px;margin-bottom:22px}
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px;margin-bottom:18px;border:1px solid var(--line)}
-.card h3{font-size:16px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.bottom-nav{display:none}
-/* ---------- 触摸优化（≤600px 真手机） ---------- */
-@media(max-width:600px){
-  .main{margin-left:0;max-width:100%;padding:70px 15px 84px}
-  .grid2,.grid3{grid-template-columns:1fr;gap:12px}
-  .btn{padding:12px 18px;font-size:14px}
-  .btn.sm{padding:8px 14px}
-  .task-row{padding:14px 12px}
-  .t-check{width:24px;height:24px}
-  .tab{padding:10px 15px;font-size:13px}
-  .hot-card,.item-card{padding:15px}
-  .hot-title{font-size:14px}
-  input[type=text],input[type=date],input[type=number],textarea,select{font-size:16px;padding:11px 12px}
-  .pomo-time{font-size:44px}
-  .pomo-ring{width:164px;height:164px}
-  .pomo-inner{width:138px;height:138px}
-  h1.pg{font-size:21px}
-  .card{padding:16px 15px}
-}
-/* 标签页 */
-.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
-.tab{padding:8px 18px;border-radius:99px;background:#fff;border:1.5px solid var(--line);cursor:pointer;font-size:13.5px;color:var(--ink2);font-weight:500;transition:.15s}
-.tab:hover{border-color:var(--accent);color:var(--accent)}
-.tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
-/* 按钮 & 表单 */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s}
-.btn:hover{filter:brightness(1.08)}
-.btn.ghost{background:var(--accent-soft);color:var(--accent)}
-.btn.green{background:var(--accent2)}
-.btn.sm{padding:5px 12px;font-size:12px;border-radius:8px}
-.btn.danger{background:#fbecec;color:#c0564f}
-input[type=text],input[type=date],input[type=number],textarea,select{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:13.5px;background:#fffdfa;color:var(--ink);outline:none;transition:.15s;resize:vertical}
-input:focus,textarea:focus,select:focus{border-color:var(--accent)}
-label.fl{display:block;font-size:12.5px;color:var(--ink2);margin:10px 0 5px;font-weight:600}
-/* 任务 */
-.task-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:#fffdf9;border:1px solid var(--line);margin-bottom:8px;transition:.15s}
-.task-row:hover{border-color:#e8d9c8}
-.task-row.done{opacity:.55}
-.task-row.done .t-name{text-decoration:line-through}
-.t-check{width:22px;height:22px;border-radius:7px;border:2px solid #d9c9b8;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;transition:.15s}
-.task-row.done .t-check{background:var(--accent2);border-color:var(--accent2)}
-.t-name{flex:1;font-size:14px}
-.t-cat{font-size:11px;padding:3px 10px;border-radius:99px;font-weight:600;flex-shrink:0}
-.del-x{color:#d0c4b6;cursor:pointer;font-size:16px;padding:2px 6px;border-radius:6px}
-.del-x:hover{background:#fbecec;color:#c0564f}
-/* 热点卡片 */
-.hot-card{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;background:#fffdf9;transition:.15s}
-.hot-card:hover{box-shadow:var(--shadow);border-color:#eddcc9}
-.hot-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
-.hot-title{font-size:15px;font-weight:700}
-.badge{font-size:11px;padding:3px 10px;border-radius:99px;font-weight:600}
-.b-fire{background:#fdeae3;color:#d95d2e}.b-new{background:var(--accent2-soft);color:var(--accent2)}
-.b-gold{background:var(--gold-soft);color:#b3861f}.b-blue{background:var(--blue-soft);color:var(--blue)}
-.b-pink{background:var(--pink-soft);color:var(--pink)}
-.hot-desc{font-size:13px;color:var(--ink2);line-height:1.75;margin-bottom:8px}
-.hot-desc b{color:var(--ink)}
-.hot-links a{font-size:12.5px;color:var(--accent);text-decoration:none;margin-right:14px;font-weight:600}
-.hot-links a:hover{text-decoration:underline}
-/* 发饰每日爆款 */
-.hair-card{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;background:#fffdf9;transition:.15s}
-.hair-card:hover{box-shadow:0 6px 18px rgba(255,143,177,.20);border-color:var(--accent-soft)}
-.hair-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
-.hair-title{font-weight:700;font-size:15px;color:var(--ink)}
-.hair-block{background:var(--accent-soft);border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:13px;color:var(--ink2);line-height:1.8}
-.hair-block .lab{display:block;font-weight:700;color:var(--accent);margin-bottom:4px;font-size:12.5px}
-.hair-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.hair-grid .hair-block{margin-bottom:0}
-.hair-links a{font-size:12.5px;color:var(--accent);text-decoration:none;font-weight:600;margin-right:12px}
-.hair-links a:hover{text-decoration:underline}
-.hair-k{font-size:12px;color:var(--ink2)}
-@media(max-width:560px){.hair-grid{grid-template-columns:1fr}}
-/* 数据条目 */
-.item-card{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;background:#fffdf9}
-.item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
-.item-title{font-weight:700;font-size:14.5px}
-.kv{font-size:13px;color:var(--ink2);line-height:1.8}
-.kv b{color:var(--ink);font-weight:600}
-.pill-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-/* 体态 */
-.day-card{border-radius:14px;padding:18px;border:2px solid var(--line);background:#fffdf9;position:relative}
-.day-card.today{border-color:var(--accent);background:var(--accent-soft)}
-.day-card .d-tag{position:absolute;top:-11px;left:14px;background:var(--accent);color:#fff;font-size:11px;padding:3px 12px;border-radius:99px;font-weight:700}
-.d-title{font-weight:800;font-size:15px;margin-bottom:2px}
-.d-focus{font-size:12px;color:var(--ink2);margin-bottom:10px}
-.vid-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;background:#fff;border:1px solid var(--line);border-radius:10px;margin-bottom:7px;font-size:13px}
-.vid-row a{color:var(--accent);text-decoration:none;font-weight:700;font-size:12px;white-space:nowrap}
-.vid-row a:hover{text-decoration:underline}
-.vid-meta{font-size:11px;color:var(--ink2)}
-/* 打卡格 */
-.streak-grid{display:flex;gap:5px;flex-wrap:wrap}
-.streak-cell{width:26px;height:26px;border-radius:7px;background:#f0e9df;display:flex;align-items:center;justify-content:center;font-size:10px;color:#b8ab9b;cursor:pointer}
-.streak-cell.hit{background:var(--accent2);color:#fff}
-/* 阅读 */
-.article-body{font-size:15px;line-height:2.05;color:#4a4036;padding:6px 4px}
-.article-body p{margin-bottom:14px;text-indent:2em}
-.art-meta{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
-.quote-card{border-left:4px solid var(--gold);background:var(--gold-soft);border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:12px}
-.quote-txt{font-size:14px;line-height:1.8;color:#6b5a35;font-style:italic}
-.quote-meta{font-size:11.5px;color:#ab9464;margin-top:8px;display:flex;justify-content:space-between;align-items:center}
-.quote-note{font-size:12.5px;color:#8a744a;margin-top:6px;padding-top:6px;border-top:1px dashed #e5d5ae}
-#selPop{position:fixed;display:none;z-index:99;background:var(--ink);color:#fff;padding:7px 14px;border-radius:99px;font-size:12.5px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
-/* 番茄钟 */
-.pomo-wrap{text-align:center;padding:10px 0}
-.pomo-time{font-size:56px;font-weight:800;letter-spacing:3px;font-variant-numeric:tabular-nums;margin:8px 0}
-.pomo-state{font-size:13px;color:var(--ink2);margin-bottom:14px}
-.pomo-ring{width:190px;height:190px;margin:0 auto 10px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--accent) 0%,#f0e6da 0%)}
-.pomo-inner{width:160px;height:160px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
-/* 统计块 */
-.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}
-.stat .num{font-size:26px;font-weight:800;color:var(--accent)}
-.stat .lbl{font-size:12px;color:var(--ink2);margin-top:2px}
-.empty{text-align:center;color:#c4b8a8;font-size:13px;padding:26px 0}
-.notice{font-size:12px;color:var(--ink2);background:var(--blue-soft);border-radius:10px;padding:10px 14px;line-height:1.7;margin-bottom:14px}
-details.tpl{border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:10px;background:#fffdf9;font-size:13px}
-details.tpl summary{cursor:pointer;font-weight:700;font-size:13.5px}
-details.tpl .tpl-body{margin-top:10px;color:var(--ink2);line-height:1.9;white-space:pre-line}
-.chk-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:#fffdf9;cursor:pointer;font-size:13.5px}
-.chk-row input{width:17px;height:17px;accent-color:var(--accent2)}
-.chk-row.ck{opacity:.55;text-decoration:line-through}
+.sidebar{position:fixed;top:0;left:0;height:100%;width:268px;max-width:82vw;z-index:60;
+  background:linear-gradient(170deg,#ffffff 0%,#f5fafe 100%);
+  box-shadow:6px 0 30px rgba(120,160,195,.22);
+  transform:translateX(-104%);transition:transform .30s cubic-bezier(.3,1,.4,1);
+  display:flex;flex-direction:column;padding:calc(18px + env(safe-area-inset-top)) 16px 20px}
+.sidebar.open{transform:translateX(0)}
+.side-head{display:flex;align-items:center;gap:10px;padding:6px 6px 16px;border-bottom:1px dashed var(--line);margin-bottom:12px}
+.side-head .bow{font-size:24px}
+.side-head b{font-size:16px;color:var(--text)}
+.side-head span{display:block;font-size:11px;color:var(--text-soft)}
+.nav-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+.nav-item{display:flex;align-items:center;gap:13px;padding:13px 14px;border-radius:16px;
+  cursor:pointer;color:var(--text);font-size:15px;font-weight:500;transition:.18s;border:1px solid transparent}
+.nav-item .ic{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--blue-soft);flex:0 0 auto}
+.nav-item:nth-child(odd) .ic{background:var(--pink-soft)}
+.nav-item:active{transform:scale(.97)}
+.nav-item.active{background:linear-gradient(120deg,var(--blue-soft),var(--pink-soft));border-color:#e6eef6;color:#46627a;font-weight:700}
+.nav-item.active .ic{background:#fff}
+.side-tip{margin-top:12px;font-size:11px;color:var(--text-soft);line-height:1.6;background:var(--blue-soft);border-radius:12px;padding:10px 12px}
+.side-export{margin-top:10px;text-align:center;font-size:12px;color:var(--text-soft);cursor:pointer;padding:8px;border-radius:10px}
+.side-export:active{background:var(--line)}
 
-/* ---------- 每日开启激励页（splash） ---------- */
-.splash{position:fixed;inset:0;z-index:200;background:linear-gradient(135deg,#ffe9f0 0%,#ffc2d6 50%,#ffaac6 100%);display:none;align-items:center;justify-content:center;padding:24px;animation:splashIn .5s ease}
-.splash.hide{animation:splashOut .35s ease forwards}
-@keyframes splashIn{from{opacity:0}to{opacity:1}}
-@keyframes splashOut{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.96);visibility:hidden}}
-.splash-card{background:rgba(255,255,255,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:24px;padding:34px 30px 24px;max-width:380px;width:100%;text-align:center;box-shadow:0 18px 50px rgba(255,95,151,.30);border:1px solid #fff}
-.splash-icon{font-size:48px;margin-bottom:4px;animation:floatY 2.2s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(255,95,151,.35))}
-@keyframes floatY{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
-.splash-title{font-size:22px;font-weight:800;color:var(--ink);margin:8px 0 4px;letter-spacing:.5px}
-.splash-title span{color:var(--accent)}
-.splash-date{font-size:13px;color:var(--ink2);margin-bottom:18px}
-.splash-quote{font-size:15.5px;line-height:1.85;color:var(--ink);margin:8px 0 26px;padding:14px 14px;background:linear-gradient(180deg,#fff7fb,#fff);border-radius:14px;border:1px dashed var(--accent);position:relative}
-.splash-quote::before{content:"❝";color:var(--accent);font-size:22px;position:absolute;left:8px;top:2px;opacity:.4}
-.splash-quote::after{content:"❞";color:var(--accent);font-size:22px;position:absolute;right:8px;bottom:-4px;opacity:.4}
-.splash-btn{width:100%;font-size:15px;padding:14px 18px;font-weight:700}
-.splash-hint{margin-top:14px;font-size:11.5px;color:var(--ink2);opacity:.85;letter-spacing:.4px}
+/* ===== 页面 ===== */
+.page{display:none;padding:16px 16px 10px;animation:fade .3s}
+.page.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec-title{display:flex;align-items:center;gap:8px;font-size:20px;font-weight:700;color:#48657c;margin:4px 2px 4px}
+.sec-title .em{font-size:22px}
+.sec-sub{font-size:12px;color:var(--text-soft);margin:0 2px 16px}
+.card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px;border:1px solid #f1f6fb}
+.card.tight{padding:14px}
 
-/* ---------- 体重模块 ---------- */
-.water-grid{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
-.water-cell{width:32px;height:36px;border-radius:8px;background:#fff;border:1.5px dashed var(--accent);display:flex;align-items:center;justify-content:center;font-size:17px;transition:.2s}
-.water-cell.fill{background:linear-gradient(180deg,#ffc7d9,#ff8fb1);border-style:solid;border-color:#ff8fb1;color:#fff;box-shadow:0 3px 8px rgba(255,95,151,.22)}
-.water-row{display:flex;align-items:center;gap:10px;margin-top:8px}
-.water-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--accent);background:#fff;color:var(--accent);font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;-webkit-tap-highlight-color:transparent;transition:.15s}
-.water-btn:active{transform:scale(.92)}
-.water-num{font-size:24px;font-weight:800;color:var(--accent);min-width:90px;text-align:center}
-.wtab{width:100%;border-collapse:collapse;font-size:13px}
-.wtab th{text-align:left;padding:8px 10px;background:var(--accent-soft);color:var(--ink);font-weight:700;border-bottom:1px solid var(--line)}
-.wtab td{padding:9px 10px;border-bottom:1px solid #f6eef2;color:var(--ink)}
-.wtab tr:last-child td{border-bottom:none}
-.wtab .delta{font-weight:700;font-size:12.5px}
-.wtab .delta.down{color:#3b9b6c}
-.wtab .delta.up{color:#d95d2e}
-.w-stat{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
-.w-stat .ws-cell{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 10px;text-align:center}
-.w-stat .ws-v{font-size:19px;font-weight:800;color:var(--ink)}
-.w-stat .ws-l{font-size:11.5px;color:var(--ink2);margin-top:3px}
-@media(max-width:600px){.w-stat{grid-template-columns:repeat(3,1fr);gap:6px}.w-stat .ws-cell{padding:10px 6px}.w-stat .ws-v{font-size:15px}}
+/* ===== 通用元素 ===== */
+.btn{border:none;border-radius:14px;padding:11px 16px;font-size:14px;font-weight:600;cursor:pointer;
+  background:linear-gradient(120deg,var(--blue),var(--pink));color:#fff;box-shadow:var(--shadow-s);transition:.15s}
+.btn:active{transform:scale(.96)}
+.btn.ghost{background:var(--blue-soft);color:var(--blue-deep)}
+.btn.pink{background:linear-gradient(120deg,var(--pink),#f6c3d6)}
+.btn.sm{padding:7px 12px;font-size:12.5px;border-radius:11px}
+.input,.textarea,select{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px 13px;
+  font-size:14px;color:var(--text);background:#fbfdff;outline:none;font-family:inherit;margin-top:6px}
+.input:focus,select:focus,.textarea:focus{border-color:var(--blue)}
+.textarea{resize:vertical;min-height:84px;line-height:1.6}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+label.fld{font-size:12.5px;color:var(--text-soft);display:block;margin-top:12px}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
+.b-fire{background:#ffe1e1;color:#e06262}
+.b-new{background:#e1f0ff;color:#4a90d9}
+.b-gold{background:#fff2d6;color:#d39a2e}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:var(--pink-soft);color:var(--pink-deep);margin:2px 4px 2px 0}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:5px 11px;border-radius:20px;background:var(--blue-soft);color:var(--blue-deep);cursor:pointer;transition:.15s}
+.pill.on{background:linear-gradient(120deg,var(--blue),var(--pink));color:#fff}
+.muted{color:var(--text-soft);font-size:12.5px}
+a.link{color:var(--blue-deep);text-decoration:none;font-weight:600;font-size:13px}
+a.link:active{opacity:.6}
+
+/* ===== 任务 / 计划 ===== */
+.rate-ring{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.ring{width:66px;height:66px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-weight:700;color:#5b86a3;font-size:15px;background:conic-gradient(var(--accent) var(--p,0deg),var(--blue-soft) 0)}
+.rate-txt b{font-size:22px;color:#48657c}
+.task{display:flex;align-items:flex-start;gap:11px;padding:13px 4px;border-bottom:1px solid var(--line)}
+.task:last-child{border-bottom:none}
+.chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--blue);flex:0 0 auto;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;transition:.15s}
+.chk.done{background:linear-gradient(120deg,var(--blue),var(--pink));border-color:transparent}
+.task .body{flex:1;min-width:0}
+.task .name{font-size:14.5px;font-weight:500}
+.task.done .name{text-decoration:line-through;color:var(--text-soft)}
+.task .cat{font-size:11px;color:var(--text-soft);margin-top:2px}
+.prio{font-size:10px;padding:1px 7px;border-radius:10px;margin-left:6px;vertical-align:middle}
+.prio.high{background:#ffe1e1;color:#e06262}
+.prio.mid{background:#fff2d6;color:#d39a2e}
+.prio.low{background:var(--blue-soft);color:var(--blue-deep)}
+.task .acts{display:flex;gap:6px;flex:0 0 auto}
+.del{color:#c9b3bd;cursor:pointer;font-size:16px;padding:0 4px}
+.edt{color:#a9c7da;cursor:pointer;font-size:15px;padding:0 4px}
+.task-add{display:flex;gap:8px;margin-top:6px}
+.task-add input{flex:1}
+
+/* ===== 热点灵感 ===== */
+.insp-card{background:linear-gradient(135deg,var(--blue-soft),var(--pink-soft));border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.insp-card h4{margin:0 0 8px;font-size:15px;color:#48657c}
+.insp-line{font-size:13.5px;margin:5px 0;color:var(--text)}
+.insp-line b{color:var(--pink-deep)}
+.hot-card{background:#fbfdff;border:1px solid var(--line);border-radius:var(--radius-s);padding:15px;margin-bottom:12px}
+.hot-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}
+.hot-title{font-weight:700;font-size:14.5px;color:#48657c}
+.hot-desc{font-size:13px;color:var(--text);line-height:1.7}
+.hot-desc b{color:var(--pink-deep)}
+.hot-links{display:flex;gap:10px;margin-top:10px}
+
+/* ===== 带货 ===== */
+.subtabs{display:flex;gap:7px;overflow-x:auto;padding:2px 0 12px;margin-bottom:4px;-webkit-overflow-scrolling:touch}
+.subtabs .pill{flex:0 0 auto;white-space:nowrap}
+.goods-card{background:#fbfdff;border:1px solid var(--line);border-radius:var(--radius-s);padding:15px;margin-bottom:12px}
+.goods-card h4{margin:0 0 4px;font-size:15px;color:#48657c;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.kv{font-size:13px;margin:6px 0;line-height:1.65}
+.kv b{color:var(--pink-deep)}
+.script-box{background:var(--blue-soft);border-radius:12px;padding:12px;font-size:13px;white-space:pre-wrap;line-height:1.7;color:var(--text);margin-top:6px}
+.prod-item,.review-item,.bench-item,.quote-item,.script-item{background:#fbfdff;border:1px solid var(--line);border-radius:var(--radius-s);padding:14px;margin-bottom:11px}
+.prod-item .ttl,.review-item .ttl,.bench-item .ttl{font-weight:700;color:#48657c;font-size:14.5px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.quote-item{background:linear-gradient(120deg,#fff,#fdf4f8);border-color:#f6e3ec}
+.quote-item .qt{font-size:14px;color:var(--text);line-height:1.7}
+.quote-item .from{font-size:11px;color:var(--text-soft);margin-top:6px}
+
+/* ===== 体态 ===== */
+.day-card{border:1px solid var(--line);border-radius:var(--radius-s);padding:15px;margin-bottom:12px;background:#fbfdff}
+.day-card.train{background:linear-gradient(135deg,var(--blue-soft),#fff)}
+.day-card .dh{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.day-card .dh b{font-size:15px;color:#48657c}
+.day-tag{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--pink-soft);color:var(--pink-deep)}
+.day-tag.rest{background:var(--blue-soft);color:var(--blue-deep)}
+.day-card ul{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--text);line-height:1.7}
+.chk-day{font-size:12px;color:var(--blue-deep);cursor:pointer;font-weight:600}
+
+/* ===== 体重 ===== */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.stat{background:var(--blue-soft);border-radius:16px;padding:13px;text-align:center}
+.stat .v{font-size:21px;font-weight:700;color:#48657c}
+.stat .l{font-size:11px;color:var(--text-soft);margin-top:2px}
+.water-box{display:flex;align-items:center;gap:12px}
+.cup{font-size:26px;cursor:pointer;transition:.15s}
+.cup:active{transform:scale(1.2)}
+#weightChart{width:100%;height:180px;display:block}
+
+/* ===== 阅读 ===== */
+.read-card{background:#fbfdff;border:1px solid var(--line);border-radius:var(--radius-s);padding:16px;margin-bottom:12px}
+.read-card .rcat{font-size:11px;padding:2px 9px;border-radius:20px;background:var(--pink-soft);color:var(--pink-deep)}
+.read-card h4{margin:8px 0 6px;font-size:15.5px;color:#48657c}
+.read-card p{font-size:13.5px;color:var(--text);line-height:1.8;margin:0}
+.read-acts{display:flex;gap:10px;margin-top:10px;align-items:center}
+
+/* ===== 专注 ===== */
+.timer{font-size:54px;font-weight:700;color:#48657c;text-align:center;margin:8px 0;font-variant-numeric:tabular-nums}
+.timer-mode{display:flex;justify-content:center;gap:8px;margin-bottom:10px}
+.breathe{width:120px;height:120px;border-radius:50%;margin:14px auto;background:radial-gradient(circle at 35% 30%,#fff,var(--blue));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;text-align:center;box-shadow:var(--shadow);
+  animation:breathe 11s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.72)}50%{transform:scale(1.05)}}
+.focus-stat{text-align:center;font-size:13px;color:var(--text-soft);margin-top:8px}
+
+/* ===== 奶茶 ===== */
+.tea-brand{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}
+.tea-result{background:linear-gradient(135deg,var(--pink-soft),var(--blue-soft));border-radius:16px;padding:16px;text-align:center;margin-top:8px}
+.tea-result .kc{font-size:30px;font-weight:800;color:#e07ba0}
+.tea-result .pr{font-size:16px;color:#48657c;margin-top:2px}
+.addon-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.tea-log{display:flex;justify-content:space-between;align-items:center;padding:11px 4px;border-bottom:1px solid var(--line);font-size:13.5px}
+.tea-log:last-child{border-bottom:none}
+.tea-log .nm{font-weight:600;color:#48657c}
+.tea-log .mt{font-size:11px;color:var(--text-soft)}
+.tea-sum{display:flex;gap:10px;margin:6px 0 12px}
+.tea-sum .stat{flex:1}
+
+/* ===== splash ===== */
+.splash{position:fixed;inset:0;z-index:200;background:linear-gradient(160deg,#eaf5fb 0%,#fdeef4 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;transition:opacity .35s}
+.splash.hide{opacity:0}
+.splash .bow{font-size:64px;animation:pop .6s cubic-bezier(.2,1.4,.5,1)}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.splash h2{margin:18px 0 6px;font-size:24px;color:#48657c}
+.splash h2 span{color:var(--pink-deep)}
+.splash .dt{font-size:13px;color:var(--text-soft);margin-bottom:22px}
+.splash .quote{font-size:17px;color:#5a7488;line-height:1.8;max-width:300px;background:rgba(255,255,255,.6);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow-s)}
+.splash .enter{margin-top:30px;padding:13px 40px;font-size:16px}
+.empty{text-align:center;color:var(--text-soft);font-size:13px;padding:26px 0}
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<button class="hamburger" id="hamburger" aria-label="打开菜单" onclick="toggleNav()"><span></span><span></span><span></span></button>
-<div class="scrim" id="scrim" onclick="toggleNav(false)"></div>
-
-<div class="splash" id="splash">
-  <div class="splash-card">
-    <div class="splash-icon">🎀</div>
-    <div class="splash-title" id="splashTitle">早上好<span>，牙牙</span></div>
-    <div class="splash-date" id="splashDate"></div>
-    <div class="splash-quote" id="splashQuote"></div>
-    <button class="btn splash-btn" onclick="dismissSplash()">开始新的一天 🌸</button>
-    <div class="splash-hint">牙牙工作台 · 陪你一起稳步向前 💕</div>
+  <!-- 顶栏 -->
+  <div class="topbar">
+    <button class="hamburger" id="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></button>
+    <div class="logo">🎀 牙牙的工作台 <small>温柔生活 · 高效创作</small></div>
+    <div class="top-date" id="topDate"></div>
   </div>
-</div>
 
-<div class="sidebar" id="sidebar">
-  <div class="logo">✨ 牙牙<span>工作台</span></div>
-  <div class="nav-item active" data-pg="dash"><span class="ico">🏠</span><span class="txt">今日总览</span></div>
-  <div class="nav-item" data-pg="hot"><span class="ico">🔥</span><span class="txt">热点灵感</span></div>
-  <div class="nav-item" data-pg="shop"><span class="ico">🛒</span><span class="txt">带货中心</span></div>
-  <div class="nav-item" data-pg="body"><span class="ico">🧘‍♀️</span><span class="txt">体态跟练</span></div>
-  <div class="nav-item" data-pg="weight"><span class="ico">⚖️</span><span class="txt">体重管理</span></div>
-  <div class="nav-item" data-pg="read"><span class="ico">📖</span><span class="txt">每日阅读</span></div>
-  <div class="nav-item" data-pg="quotes"><span class="ico">💛</span><span class="txt">我的语句库</span></div>
-  <div class="nav-item" data-pg="focus"><span class="ico">🎯</span><span class="txt">专注力提升</span></div>
-  <div class="side-tip">💡 热点与爆款数据基于 2026年7月下旬。想更新时，直接让 WorkBuddy 重新爬一轮即可。</div>
-  <a class="side-export" onclick="exportData();toggleNav(false)">⤓ 导出数据备份</a>
-</div>
+  <!-- 侧边导航 -->
+  <div class="scrim" id="scrim" onclick="toggleNav(false)"></div>
+  <nav class="sidebar" id="sidebar">
+    <div class="side-head">
+      <div class="bow">🎀</div>
+      <div><b>牙牙的工作台</b><span>每日一点点，慢慢变好</span></div>
+    </div>
+    <div class="nav-list" id="navList">
+      <div class="nav-item" data-pg="plan"><span class="ic">📝</span>每日计划</div>
+      <div class="nav-item" data-pg="hot"><span class="ic">💡</span>热点灵感</div>
+      <div class="nav-item" data-pg="sell"><span class="ic">🛍️</span>带货中心</div>
+      <div class="nav-item" data-pg="body"><span class="ic">🧘‍♀️</span>体态跟练</div>
+      <div class="nav-item" data-pg="weight"><span class="ic">⚖️</span>体重管理</div>
+      <div class="nav-item" data-pg="read"><span class="ic">📚</span>每日阅读</div>
+      <div class="nav-item" data-pg="quotes"><span class="ic">💬</span>我的语句库</div>
+      <div class="nav-item" data-pg="focus"><span class="ic">🎯</span>专注力提升</div>
+      <div class="nav-item" data-pg="tea"><span class="ic">🧋</span>奶茶记账</div>
+    </div>
+    <div class="side-tip">💡 所有记录自动保存在本机；开启云端同步后手机电脑共用一份。</div>
+    <div class="side-export" onclick="exportData()">⤓ 导出数据备份</div>
+  </nav>
 
-<div class="main">
+  <!-- 页面容器 -->
+  <div id="pages">
 
-<!-- ============ 今日总览 ============ -->
-<div class="page show" id="pg-dash">
-  <h1 class="pg" id="greeting">你好 👋</h1>
-  <p class="sub" id="dateLine"></p>
-  <div class="grid3" style="margin-bottom:18px">
-    <div class="stat"><div class="num" id="stTask">0/0</div><div class="lbl">今日任务完成</div></div>
-    <div class="stat"><div class="num" id="stBody">—</div><div class="lbl">今日训练安排</div></div>
-    <div class="stat"><div class="num" id="stQuote">0</div><div class="lbl">语句库收藏</div></div>
-  </div>
-  <div class="grid2">
-    <div class="card">
-      <h3>📋 今日任务</h3>
-      <div style="display:flex;gap:8px;margin-bottom:12px">
-        <input type="text" id="taskInput" placeholder="添加一条任务，回车确认…" style="flex:1">
-        <select id="taskCat" style="width:110px">
-          <option>内容创作</option><option>带货</option><option>体态</option><option>阅读</option><option>生活</option>
-        </select>
-        <button class="btn" onclick="addTask()">添加</button>
+    <!-- 每日计划 -->
+    <section class="page" id="pg-plan">
+      <div class="sec-title"><span class="em">📝</span>每日计划</div>
+      <div class="sec-sub">汇总今日全部待办，勾选完成、标记优先级，自动统计完成率。</div>
+      <div class="card tight">
+        <div class="rate-ring">
+          <div class="ring" id="planRing">0%</div>
+          <div class="rate-txt"><b id="planRateNum">0/0</b><br><span class="muted">今日已完成 / 总数</span></div>
+        </div>
+        <div class="task-add">
+          <input class="input" id="taskInput" placeholder="添加一件待办，回车确认…" onkeydown="if(event.key==='Enter')addTask()">
+          <select id="taskPrio" style="flex:0 0 92px;margin-top:6px">
+            <option value="mid">中优先</option><option value="high">高优先</option><option value="low">低优先</option>
+          </select>
+          <button class="btn sm" style="flex:0 0 auto;margin-top:6px" onclick="addTask()">＋</button>
+        </div>
       </div>
       <div id="taskList"></div>
-    </div>
-    <div>
-      <div class="card">
-        <h3>🗓️ 今日路线图</h3>
-        <div class="kv" id="todayPlan"></div>
+    </section>
+
+    <!-- 热点灵感 -->
+    <section class="page" id="pg-hot">
+      <div class="sec-title"><span class="em">💡</span>热点灵感</div>
+      <div class="sec-sub">每日自动生成短视频选题 / 文案创意 / 镜头思路；抖音爆款热点实时追踪。</div>
+      <div class="insp-card" id="inspCard"></div>
+      <div class="subtabs" id="hotTabs">
+        <span class="pill on" data-t="gesture">手势舞</span>
+        <span class="pill" data-t="trans">对口型·转场</span>
+        <span class="pill" data-t="funny">搞笑视频</span>
+        <span class="pill" data-t="bgm">热门BGM</span>
       </div>
-      <div class="card">
-        <h3>⚡ 快捷入口</h3>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn ghost sm" onclick="go('hot')">🔥 看今日热点</button>
-          <button class="btn ghost sm" onclick="go('read')">📖 开始今日阅读</button>
-          <button class="btn ghost sm" onclick="go('body')">🧘 开始今日训练</button>
-          <button class="btn ghost sm" onclick="go('focus');">🍅 来一个番茄钟</button>
-          <button class="btn ghost sm" onclick="go('shop')">🛒 写今日复盘</button>
+      <div id="hotList"></div>
+    </section>
+
+    <!-- 带货中心 -->
+    <section class="page" id="pg-sell">
+      <div class="sec-title"><span class="em">🛍️</span>带货中心</div>
+      <div class="sec-sub">选品 · 脚本 · 复盘 · 对标，一条链路打通。</div>
+      <div class="subtabs" id="sellTabs">
+        <span class="pill on" data-s="goods">①近日爆款选品</span>
+        <span class="pill" data-s="myprod">②我的选品库</span>
+        <span class="pill" data-s="script">③脚本创作</span>
+        <span class="pill" data-s="review">④每日复盘</span>
+        <span class="pill" data-s="bench">⑤对标账号</span>
+      </div>
+      <div id="sellBox"></div>
+    </section>
+
+    <!-- 体态跟练 -->
+    <section class="page" id="pg-body">
+      <div class="sec-title"><span class="em">🧘‍♀️</span>体态跟练</div>
+      <div class="sec-sub">针对脖子前倾 / 骨盆前倾 / 小肚子 / 驼背；四天三练节奏，主推欧阳春晓矫正 + 减脂跟练。</div>
+      <div id="bodyBox"></div>
+    </section>
+
+    <!-- 体重管理 -->
+    <section class="page" id="pg-weight">
+      <div class="sec-title"><span class="em">⚖️</span>体重管理</div>
+      <div class="sec-sub">身高 / 体重 / 体脂 / 饮水，按月折线图看变化。</div>
+      <div class="card tight">
+        <div class="stat-grid">
+          <div class="stat"><div class="v" id="wNow">—</div><div class="l">最新体重(kg)</div></div>
+          <div class="stat"><div class="v" id="fNow">—</div><div class="l">体脂率(%)</div></div>
+          <div class="stat"><div class="v" id="bmiNow">—</div><div class="l">BMI</div></div>
+        </div>
+        <label class="fld">身高(cm) · 设一次即可</label>
+        <div class="row">
+          <input class="input" id="wHeight" type="number" placeholder="如 165">
+          <button class="btn ghost sm" style="flex:0 0 auto" onclick="saveWHeight()">保存身高</button>
+        </div>
+        <label class="fld">今日体重(kg) / 体脂(%)</label>
+        <div class="row">
+          <input class="input" id="wWeight" type="number" placeholder="体重">
+          <input class="input" id="wFat" type="number" placeholder="体脂(可空)">
+          <button class="btn sm" style="flex:0 0 auto" onclick="saveWRec()">记录</button>
+        </div>
+        <label class="fld">今日喝水（每杯 250ml）</label>
+        <div class="water-box">
+          <span class="cup" onclick="addWater(-1)">➖</span>
+          <span id="waterNum" style="font-size:18px;font-weight:700;color:#48657c">0</span>
+          <span class="cup" onclick="addWater(1)">➕</span>
+          <span class="muted" id="waterMl" style="margin-left:auto">0 ml</span>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-  <div class="card" style="display:none">
-    <h3>⚙️ 数据备份与同步</h3>
-    <p class="sub" style="margin-bottom:12px">手机和电脑各自存一份数据、互不相通。用下面两个按钮，把数据导出成文件，再在另一台设备导入，即可同步（任务 / 选品 / 语句库 / 复盘 / 打卡等全部包含）。</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn" onclick="exportData()">⬇️ 导出数据备份</button>
-      <label class="btn ghost">⬆️ 导入数据备份<input type="file" id="importFile" accept="application/json" style="display:none" onchange="importData(event)"></label>
-    </div>
-    <hr style="border:none;border-top:1px dashed var(--line);margin:18px 0">
-    <h3>☁️ 云端自动同步</h3>
-    <p class="sub" style="margin-bottom:12px">连接后手机和电脑<b>自动共用一份数据</b>，无需手动传文件。</p>
-
-    <!-- 内置云端（免账号，部署后自动出现） -->
-    <div id="selfSyncWrap" style="display:none;margin-bottom:14px;padding:12px;border:1px dashed var(--green);border-radius:12px;background:rgba(34,197,94,.06)">
-      <b>🚀 检测到内置云端（免注册账号）</b>
-      <p class="sub" style="margin:6px 0">你的数据存在工作台自己的云端，手机和电脑自动同步，<b>无需任何第三方账号</b>。</p>
-      <button class="btn green" onclick="enableSelfSync()">✅ 一键启用同步</button>
-    </div>
-
-    <!-- Supabase 备选方案 -->
-    <details style="margin-bottom:10px">
-      <summary style="cursor:pointer;color:var(--ink2);font-size:13px">没有内置云端？用 Supabase 免费账号（2 步）</summary>
-      <ol style="font-size:13px;color:var(--ink2);line-height:1.7;margin:8px 0 0 18px">
-        <li>打开 <a href="https://supabase.com" target="_blank" style="color:var(--green)">supabase.com</a> 用 GitHub 登录 → New Project（免费）。</li>
-        <li>左侧 SQL Editor 粘贴下面 SQL 运行 → 再到 Project Settings → API 复制 URL 和 anon key 填入即可。</li>
-      </ol>
-      <div style="margin-top:8px">
-        <button class="btn ghost" onclick="copySql()">📋 复制建表 SQL</button>
+      <div class="card tight">
+        <div class="sec-sub" style="margin:0 0 4px">📈 体重 / 体脂 月度变化</div>
+        <select id="monthSel" onchange="renderWeight()" style="margin-top:0"></select>
+        <svg id="weightChart" viewBox="0 0 320 180" preserveAspectRatio="none"></svg>
+        <div id="wLogList"></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
-        <div><label class="fl">Project URL</label><input type="text" id="sbUrl" value="https://rnatbptffpjvnmvsertp.supabase.co" placeholder="https://xxxx.supabase.co"></div>
-        <div><label class="fl">Anon Key</label><input type="text" id="sbKey" value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuYXRicHRmZnBqdm5tdnNlcnRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyMDk4MzQsImV4cCI6MjEwMDc4NTgzNH0._3s35tcPemjmQr_ngrfDeuFXCFR386e77JLW_rL8tis" placeholder="eyJhbGci..."></div>
+    </section>
+
+    <!-- 每日阅读 -->
+    <section class="page" id="pg-read">
+      <div class="sec-title"><span class="em">📚</span>每日阅读</div>
+      <div class="sec-sub">每日推送提升表达力的文章：带货文案素材 + 深度知识积累。</div>
+      <div class="subtabs" id="readTabs">
+        <span class="pill on" data-r="all">全部</span>
+        <span class="pill" data-r="copy">带货文案素材</span>
+        <span class="pill" data-r="deep">深度知识积累</span>
       </div>
-      <div style="margin-top:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <button class="btn" onclick="connectSync()">🔗 连接并启用</button>
+      <div id="readList"></div>
+    </section>
+
+    <!-- 我的语句库 -->
+    <section class="page" id="pg-quotes">
+      <div class="sec-title"><span class="em">💬</span>我的语句库</div>
+      <div class="sec-sub">从每日阅读一键收藏喜欢的句子，集中收纳随时复盘。</div>
+      <div class="card tight" style="margin-bottom:12px">
+        <input class="input" id="quoteInput" placeholder="也可以手动添加一句…" onkeydown="if(event.key==='Enter')addQuote()">
+        <button class="btn sm" style="margin-top:8px" onclick="addQuote()">＋ 添加</button>
       </div>
-    </details>
+      <div id="quoteList"></div>
+    </section>
 
-    <div style="margin-top:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <button class="btn danger" onclick="disconnectSync()">断开同步</button>
-      <span id="syncStatus" style="font-size:12.5px;color:var(--ink2)">当前：未连接</span>
-    </div>
-  </div>
-</div>
-
-<!-- ============ 热点灵感 ============ -->
-<div class="page" id="pg-hot">
-  <h1 class="pg">🔥 抖音热点灵感</h1>
-  <p class="sub">已按你的偏好过滤：聚焦手势舞 / 转场 / 搞笑 / 爆款BGM，剔除时政、体育赛事类。</p>
-  <div class="notice">📌 数据快照：2026年7月下旬（来源：抖音热榜生态、蝉妈妈、公开热点汇总）。每条附「去抖音看」直达搜索页看最新实拍。想刷新整页数据，对 WorkBuddy 说一句"更新热点"即可。</div>
-  <div class="tabs" id="hotTabs">
-    <div class="tab on" data-t="gesture">🖐️ 手势舞</div>
-    <div class="tab" data-t="trans">🎬 转场创意</div>
-    <div class="tab" data-t="funny">😂 搞笑热梗</div>
-    <div class="tab" data-t="bgm">🎵 爆款BGM</div>
-  </div>
-  <div id="hotList"></div>
-</div>
-
-<!-- ============ 带货中心 ============ -->
-<div class="page" id="pg-shop">
-  <h1 class="pg">🛒 短视频带货中心</h1>
-  <p class="sub">从选品到脚本到复盘，一站式管理你的带货业务。</p>
-  <div class="tabs" id="shopTabs">
-    <div class="tab on" data-t="daily">📈 每日爆款参考</div>
-    <div class="tab" data-t="pick">🧺 我的选品库</div>
-    <div class="tab" data-t="script">✍️ 脚本撰写</div>
-    <div class="tab" data-t="review">🌙 每日复盘</div>
-    <div class="tab" data-t="summary">🧭 选品总结</div>
-    <div class="tab" data-t="hair">🎀 发饰爆款</div>
-  </div>
-
-  <div class="shop-sec" id="shop-daily">
-    <div class="notice">📌 以下为 2026年7月下旬抖音带货爆款风向（蝉妈妈/抖音电商公开数据），重点看「可借鉴打法」。日常可去：<a href="https://www.chanmama.com" target="_blank" style="color:var(--blue)">蝉妈妈</a> ｜ <a href="https://www.douyin.com/hot" target="_blank" style="color:var(--blue)">抖音热榜</a></div>
-    <div id="dailyHotGoods"></div>
-  </div>
-
-  <div class="shop-sec" id="shop-pick" style="display:none">
-    <div class="card">
-      <h3>➕ 新增选品</h3>
-      <div class="grid2">
-        <div><label class="fl">商品名称</label><input type="text" id="pName" placeholder="如：便携喷雾水杯"></div>
-        <div><label class="fl">类目</label><select id="pCat"><option>美妆护肤</option><option>服饰穿搭</option><option>居家好物</option><option>食品饮料</option><option>轻户外/运动</option><option>母婴</option><option>3C数码</option><option>其他</option></select></div>
-      </div>
-      <div class="grid2">
-        <div><label class="fl">价格带</label><select id="pPrice"><option>0-20元</option><option>20-50元</option><option>50-100元</option><option>100-300元</option><option>300元以上</option></select></div>
-        <div><label class="fl">目标人群</label><input type="text" id="pWho" placeholder="如：20-30岁通勤女生"></div>
-      </div>
-      <label class="fl">核心卖点（用户为什么买它）</label><textarea id="pSell" rows="2" placeholder="如：一杯两用，按压出雾，夏天户外随时降温补水"></textarea>
-      <label class="fl">击中的痛点（用户当下的难受）</label><textarea id="pPain" rows="2" placeholder="如：夏天出门暴晒又热又渴，普通水杯只能喝不能降温"></textarea>
-      <div style="margin-top:12px"><button class="btn" onclick="addProduct()">保存到选品库</button></div>
-    </div>
-    <div id="prodList"></div>
-  </div>
-
-  <div class="shop-sec" id="shop-script" style="display:none">
-    <div class="card">
-      <h3>🧩 爆款脚本公式（点开参考）</h3>
-      <details class="tpl"><summary>公式① 黄金3秒钩子 → 痛点 → 卖点 → 信任 → 催单（最通用）</summary><div class="tpl-body">【0-3s 钩子】用一句反常识/提问/结果前置抓住人："我再也不买XX了，直到遇见它"
-【3-10s 痛点】演出来而不是说出来：还原用户难受的具体场景
-【10-25s 卖点】只讲1-2个核心卖点，配合演示画面，"看得见"的效果
-【25-35s 信任】自用实拍/成分/销量/对比，给一个"敢买"的理由
-【35s-结尾 催单】限时/限量/价格锚点＋明确指令："点左下角小黄车"</div></details>
-      <details class="tpl"><summary>公式② 剧情植入式（搞笑/反转向）</summary><div class="tpl-body">【前5s】抛出一个生活化冲突（越真实越好）
-【中段】冲突升级，产品作为"解决方案"自然登场
-【结尾】反转+点题，口播补1句核心卖点，评论区置顶购买链接引导</div></details>
-      <details class="tpl"><summary>公式③ 沉浸式测评（信任向，适合美妆/好物）</summary><div class="tpl-body">【开头】"这是我自费买的第N个XX"，先立客观人设
-【中段】真实使用过程+缺点也要讲一个（增强可信度）
-【结尾】"什么人适合/什么人别买"，反向筛选反而促单</div></details>
-      <h3 style="margin-top:18px">✍️ 写一条新脚本</h3>
-      <div class="grid2">
-        <div><label class="fl">脚本标题</label><input type="text" id="scTitle" placeholder="如：喷雾水杯-钩子版1"></div>
-        <div><label class="fl">关联商品（选填）</label><input type="text" id="scProd" placeholder="如：便携喷雾水杯"></div>
-      </div>
-      <label class="fl">🪝 开头钩子（0-3秒）</label><textarea id="scHook" rows="2" placeholder="一句话让人停下手指…"></textarea>
-      <label class="fl">💢 痛点场景（怎么演）</label><textarea id="scPain" rows="2"></textarea>
-      <label class="fl">💎 卖点展示（画面+台词）</label><textarea id="scSell" rows="3"></textarea>
-      <label class="fl">🤝 信任背书</label><textarea id="scTrust" rows="2"></textarea>
-      <label class="fl">📣 催单话术</label><textarea id="scCta" rows="2"></textarea>
-      <div style="margin-top:12px"><button class="btn" onclick="addScript()">保存脚本</button></div>
-    </div>
-    <div id="scriptList"></div>
-  </div>
-
-  <div class="shop-sec" id="shop-review" style="display:none">
-    <div class="card">
-      <h3>🌙 写今日复盘</h3>
-      <div class="grid2">
-        <div><label class="fl">日期</label><input type="date" id="rvDate"></div>
-        <div><label class="fl">今日数据（播放/点赞/转化等）</label><input type="text" id="rvData" placeholder="如：播放1.2w，点赞350，出单8"></div>
-      </div>
-      <label class="fl">✅ 今天做得好的</label><textarea id="rvGood" rows="2" placeholder="哪个钩子/画面/话术有效果？"></textarea>
-      <label class="fl">🔍 哪些内容可以优化</label><textarea id="rvBad" rows="2" placeholder="完播率低？前3秒流失？转化差？"></textarea>
-      <label class="fl">🛠️ 具体如何优化（明天就能做的动作）</label><textarea id="rvHow" rows="2" placeholder="如：钩子改成提问式；产品特写提前到第8秒…"></textarea>
-      <div style="margin-top:12px"><button class="btn" onclick="addReview()">保存复盘</button></div>
-    </div>
-    <div id="reviewList"></div>
-  </div>
-
-  <div class="shop-sec" id="shop-summary" style="display:none">
-    <div class="card">
-      <h3>📊 选品库自动画像</h3>
-      <div class="kv" id="prodStats"><span style="color:#c4b8a8">选品库还是空的，先去「我的选品库」添加几个商品吧。</span></div>
-    </div>
-    <div class="card">
-      <h3>🧭 我的选品经验总结（手动沉淀）</h3>
-      <p class="sub" style="margin-bottom:10px">把"什么样的品在我这里卖得动"写下来，这是你最值钱的资产。</p>
-      <textarea id="sumNote" rows="7" placeholder="例：
-· 我的粉丝对50元以下、看得见效果的居家小物转化最好
-· 纯讲功能的视频不行，必须有场景剧情
-· 白色/奶油色系产品出图好看，点击率高…"></textarea>
-      <div style="margin-top:10px"><button class="btn" onclick="saveSumNote()">保存总结</button> <span id="sumSaved" style="font-size:12px;color:var(--accent2)"></span></div>
-    </div>
-  </div>
-
-  <div class="shop-sec" id="shop-hair" style="display:none">
-    <div class="notice">🎀 每日自动抓取抖音 <b>发饰类</b> 爆款视频，帮你提取「爆款文案脚本 / 卖点 / 痛点」。点 <b>▶ 去抖音看原视频</b> 可直接跳转研究对标账号。常用素材站：<a href="https://www.chanmama.com" target="_blank" style="color:var(--blue)">蝉妈妈</a> ｜ <a href="https://www.douyin.com/hot" target="_blank" style="color:var(--blue)">抖音热榜</a></div>
-    <div id="hairList"></div>
-  </div>
-</div>
-
-<!-- ============ 体重管理 ============ -->
-<div class="page" id="pg-weight">
-  <h1 class="pg">⚖️ 体重管理</h1>
-  <p class="sub">记录身高体重体脂与每日饮水，看着曲线慢慢变成喜欢的样子 💕</p>
-
-  <div class="w-stat">
-    <div class="ws-cell"><div class="ws-v" id="wNow">—</div><div class="ws-l">最近体重(kg)</div></div>
-    <div class="ws-cell"><div class="ws-v" id="wFatNow">—</div><div class="ws-l">最近体脂(%)</div></div>
-    <div class="ws-cell"><div class="ws-v" id="bmiNow">—</div><div class="ws-l">BMI</div></div>
-  </div>
-
-  <div class="grid2" style="margin-top:18px">
-    <div class="card">
-      <h3>📏 基础信息</h3>
-      <label class="fl">身高(cm)</label>
-      <input type="number" id="wHeight" placeholder="如 163" step="0.5">
-      <div style="margin-top:10px"><button class="btn sm" onclick="saveWHeight()">保存身高</button> <span id="hSaved" style="font-size:12px;color:var(--accent2)"></span></div>
-      <p class="sub" style="margin-top:10px;margin-bottom:0;font-size:12px">BMI = 体重(kg) ÷ 身高²(m²)，<b>正常范围 18.5–24</b>。</p>
-    </div>
-
-    <div class="card">
-      <h3>💧 今日饮水</h3>
-      <p class="sub" style="margin-bottom:8px">每天目标 8 杯 = 2000 ml（1 杯 = 250 ml）</p>
-      <div class="water-grid" id="waterGrid"></div>
-      <div class="water-row">
-        <button class="water-btn" onclick="waterAdd(-1)">−</button>
-        <div class="water-num"><span id="waterCnt">0</span> <small style="font-size:13px;color:var(--ink2);font-weight:600">/ 8 杯</small></div>
-        <button class="water-btn" onclick="waterAdd(1)">+</button>
-      </div>
-      <p class="sub" style="margin:8px 0 0;font-size:12px">已喝 <b id="waterML">0</b> ml · 距目标还差 <b id="waterLeft">2000</b> ml <span id="waterPct" style="color:var(--accent)"></span></p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>📝 今日身体数据</h3>
-    <p class="sub" style="margin-bottom:12px">填上今日体重/体脂，自动存入历史曲线（每天限一条，最新覆盖）。</p>
-    <div class="grid2">
-      <div><label class="fl">体重 (kg)</label><input type="number" id="wWeight" step="0.1" placeholder="如 50.2"></div>
-      <div><label class="fl">体脂率 (%)</label><input type="number" id="wFat" step="0.1" placeholder="如 28.5 (可空)"></div>
-    </div>
-    <div style="margin-top:12px"><button class="btn" onclick="saveWRecord()">💾 保存今日记录</button> <span id="wSaved" style="font-size:12.5px;color:var(--accent2)"></span></div>
-  </div>
-
-  <div class="card">
-    <h3>📈 近期记录 <span style="font-size:12px;color:var(--ink2);font-weight:500">（最近 15 条，按日期倒序）</span></h3>
-    <div id="wTrend"></div>
-  </div>
-
-  <div class="card" style="background:var(--accent2-soft);border-color:#e5d6f2">
-    <h3>💡 小贴士</h3>
-    <ul style="padding-left:18px;line-height:1.9;font-size:13.5px;color:var(--ink)">
-      <li>体重<b>每天同一时段</b>测量更准确（如早起空腹上完厕所后）。</li>
-      <li>短期波动 1–2 kg 是水分；看 <b>周/月的趋势</b> 比看单日更客观。</li>
-      <li>配合每日跟练和戒奶茶一个月，你会发现腰围比数字更会说话 🌷</li>
-    </ul>
-  </div>
-</div>
-
-<!-- ============ 体态跟练 ============ -->
-<div class="page" id="pg-body">
-  <h1 class="pg">🧘‍♀️ 体态跟练计划</h1>
-  <p class="sub">针对：脖子前倾 · 驼背（上交叉综合征）｜骨盆前倾 · 小肚子突出（下交叉综合征）｜小基数减脂 —— 四天为一循环，练三休一。</p>
-  <div class="card" style="background:var(--accent2-soft);border-color:#d5e8e0">
-    <h3>📍 今天练什么？</h3>
-    <div class="kv" id="bodyToday"></div>
-    <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <button class="btn green" onclick="checkinToday()" id="ckBtn">✅ 完成今日打卡</button>
-      <span style="font-size:12.5px;color:var(--ink2)">循环起始日：<input type="date" id="cycleStart" style="width:150px;display:inline-block;padding:4px 8px" onchange="setCycleStart()"></span>
-    </div>
-  </div>
-  <div class="grid2" id="bodyDays"></div>
-  <div class="card">
-    <h3>🔥 最近30天打卡</h3>
-    <div class="streak-grid" id="streakGrid"></div>
-    <p style="font-size:12px;color:var(--ink2);margin-top:10px">连续打卡：<b id="streakNum" style="color:var(--accent)">0</b> 天 ｜ 点击格子可补打卡/取消</p>
-  </div>
-  <div class="card">
-    <h3>💡 小基数减脂提醒</h3>
-    <div class="kv">小基数（体重基数不大但体脂偏高）的核心是<b>「增肌塑形 + 轻缺口饮食」</b>，不是狂做有氧。大量有氧+节食会掉肌肉、降代谢，越减越松。所以本计划力量/塑形为主，燃脂日安排低冲击 HIIT；饮食保证蛋白质（每公斤体重 1.2-1.6g），主食减 1/4 即可，不要断碳。</div>
-  </div>
-</div>
-
-<!-- ============ 每日阅读 ============ -->
-<div class="page" id="pg-read">
-  <h1 class="pg">📖 每日阅读</h1>
-  <p class="sub">每天两篇：一篇提升带货表达，一篇积累深度知识。<b style="color:var(--accent)">选中文中任意句子，会弹出「收藏」按钮</b>，一键存入语句库。</p>
-  <div class="tabs" id="readTabs">
-    <div class="tab on" data-t="sell">🎤 带货表达</div>
-    <div class="tab" data-t="deep">🌊 深度知识</div>
-  </div>
-  <div class="card" id="articleCard">
-    <div class="art-meta">
-      <span class="badge b-gold" id="artTag"></span>
-      <span style="font-size:12px;color:var(--ink2)" id="artDay"></span>
-      <button class="btn ghost sm" onclick="shuffleArticle()">🔄 换一篇</button>
-    </div>
-    <h3 style="font-size:19px" id="artTitle"></h3>
-    <div class="article-body" id="artBody"></div>
-  </div>
-</div>
-
-<!-- ============ 语句库 ============ -->
-<div class="page" id="pg-quotes">
-  <h1 class="pg">💛 我的语句库</h1>
-  <p class="sub">摘抄过的句子都在这里，常回来翻翻，它们会变成你自己的表达。</p>
-  <div style="margin-bottom:16px"><input type="text" id="qSearch" placeholder="🔍 搜索语句…" oninput="renderQuotes()"></div>
-  <div id="quoteList"></div>
-</div>
-
-<!-- ============ 专注力 ============ -->
-<div class="page" id="pg-focus">
-  <h1 class="pg">🎯 专注力提升</h1>
-  <p class="sub">短视频把注意力切成了 15 秒一段。这里帮你一点点把它缝回来。</p>
-  <div class="grid2">
-    <div class="card">
-      <h3>🍅 番茄钟（25分钟专注 + 5分钟休息）</h3>
-      <div class="pomo-wrap">
-        <div class="pomo-ring" id="pomoRing"><div class="pomo-inner">
-          <div class="pomo-time" id="pomoTime" style="font-size:36px">25:00</div>
-          <div class="pomo-state" id="pomoState">准备开始</div>
-        </div></div>
-        <div style="display:flex;gap:10px;justify-content:center">
-          <button class="btn" id="pomoBtn" onclick="pomoToggle()">▶ 开始专注</button>
-          <button class="btn ghost" onclick="pomoReset()">重置</button>
+    <!-- 专注力提升 -->
+    <section class="page" id="pg-focus">
+      <div class="sec-title"><span class="em">🎯</span>专注力提升</div>
+      <div class="sec-sub">番茄专注 · 呼吸放松 · 专注打卡，慢慢把注意力找回来。</div>
+      <div class="card tight" style="text-align:center">
+        <div class="timer-mode">
+          <span class="pill on" data-m="25" onclick="setMode(25,this)">专注25</span>
+          <span class="pill" data-m="5" onclick="setMode(5,this)">休息5</span>
+          <span class="pill" data-m="15" onclick="setMode(15,this)">深度15</span>
         </div>
-        <p style="font-size:12.5px;color:var(--ink2);margin-top:12px">今日已完成 <b id="pomoCount" style="color:var(--accent)">0</b> 个番茄 🍅</p>
+        <div class="timer" id="fTimer">25:00</div>
+        <button class="btn" id="fBtn" onclick="toggleFocus()">开始专注</button>
+        <div class="focus-stat" id="fStat">今日已专注 0 分钟</div>
       </div>
-    </div>
-    <div class="card">
-      <h3>✅ 今日专注挑战（每天重置）</h3>
-      <div id="focusChk"></div>
-    </div>
-  </div>
-  <div class="card">
-    <h3>🧠 为什么你无法专注？（先理解，再改变）</h3>
-    <div class="kv">短视频的算法在用<b>不定时奖励</b>训练你的大脑——就像老虎机，你永远不知道下一个视频是不是"爆点"，所以停不下来。长期刷下来，大脑的多巴胺基线被拉高，<b>普通强度的刺激（读书、工作、聊天）就显得"无聊"</b>，这不是你意志力差，是神经机制被劫持了。好消息：注意力像肌肉，<b>练回来只需要 2-4 周的刻意恢复</b>。</div>
-  </div>
-  <div class="grid2">
-    <div class="card">
-      <h3>🛠️ 恢复注意力的 6 个方法</h3>
-      <div class="kv">
-        <b>1. 单任务原则</b>：一次只做一件事，吃饭不看手机，走路不听播客，先从"允许无聊"开始。<br>
-        <b>2. 物理隔离手机</b>：工作/阅读时手机放另一个房间。研究显示手机仅仅"在视线内"就会占用认知资源。<br>
-        <b>3. 刷抖音改成"定时定量"</b>：作为创作者你不能不刷，但要从"被动刷"变"主动看"——用番茄钟限定 25 分钟，带着"找选题"的任务去刷。<br>
-        <b>4. 每日 15 分钟纸质/长文阅读</b>：就用本工作台的每日阅读，从 15 分钟开始，逐周加 5 分钟。<br>
-        <b>5. 运动重置多巴胺</b>：体态跟练本身就是专注力训练——跟练时必须全程盯动作，这是天然的正念练习。<br>
-        <b>6. 睡前 1 小时断网</b>：睡眠是注意力的地基，睡前刷手机 = 第二天注意力破产。
+      <div class="card tight" style="text-align:center">
+        <div class="sec-sub" style="margin:0 0 4px">🌿 4-7-8 呼吸放松</div>
+        <div class="breathe" id="breathTxt">吸气 4 秒</div>
+        <div class="muted">跟随圆圈缩放：吸气 4 秒 → 屏息 7 秒 → 呼气 8 秒</div>
       </div>
-    </div>
-    <div class="card">
-      <h3>📅 21天注意力恢复路线</h3>
-      <div class="kv">
-        <b>第1周 · 止损</b>：只做两件事——睡前断网 + 单任务吃饭。不要求减少刷手机总量，先切断"无意识刷"。<br><br>
-        <b>第2周 · 替换</b>：每天 1 个番茄钟深度工作 + 15 分钟每日阅读。刷抖音前先说出目的（找选题/找BGM）。<br><br>
-        <b>第3周 · 巩固</b>：番茄钟加到 2-3 个/天，阅读加到 25 分钟。你会明显感觉"坐得住"了。<br><br>
-        💡 判断标准：能一口气读完一篇每日阅读文章而不摸手机，就说明恢复得很好。
+    </section>
+
+    <!-- 奶茶记账 -->
+    <section class="page" id="pg-tea">
+      <div class="sec-title"><span class="em">🧋</span>奶茶记账</div>
+      <div class="sec-sub">查热量配一杯 · 记一笔月度开销，清爽简单。</div>
+      <div class="card">
+        <div class="sec-sub" style="margin:0 0 4px">🔍 奶茶信息查询（热量 / 价格参考）</div>
+        <label class="fld">选择品牌</label>
+        <div class="tea-brand" id="teaBrand"></div>
+        <label class="fld">选择饮品</label>
+        <select id="teaDrink" onchange="calcTea()"></select>
+        <label class="fld">甜度</label>
+        <select id="teaSweet" onchange="calcTea()">
+          <option value="1">全糖</option><option value="0.8">七分糖</option>
+          <option value="0.6" selected>五分糖</option><option value="0.4">三分糖</option><option value="0.2">无糖</option>
+        </select>
+        <label class="fld">冰度</label>
+        <select id="teaIce" onchange="calcTea()">
+          <option value="0">正常冰</option><option value="0">少冰</option><option value="0">去冰</option><option value="0">常温</option>
+        </select>
+        <label class="fld">加料（可多选）</label>
+        <div class="addon-grid" id="teaAddon"></div>
+        <div class="tea-result">
+          <div class="kc" id="teaKcal">— kcal</div>
+          <div class="pr" id="teaPrice">约 ¥ —</div>
+          <div class="muted" id="teaName" style="margin-top:4px"></div>
+        </div>
+        <button class="btn pink" style="width:100%;margin-top:12px" onclick="logTeaFromQuery()">📝 记一笔这笔奶茶</button>
       </div>
-    </div>
+      <div class="card tight">
+        <div class="tea-sum">
+          <div class="stat"><div class="v" id="teaCount">0</div><div class="l">本月次数</div></div>
+          <div class="stat"><div class="v" id="teaSpend">¥0</div><div class="l">本月开销</div></div>
+        </div>
+        <div id="teaLogList"></div>
+      </div>
+    </section>
+
   </div>
 </div>
 
-</div><!-- main end -->
-
-<nav class="bottom-nav">
-  <div class="bn-item active" data-pg="dash"><span class="ico">🏠</span>总览</div>
-  <div class="bn-item" data-pg="hot"><span class="ico">🔥</span>热点</div>
-  <div class="bn-item" data-pg="shop"><span class="ico">🛒</span>带货</div>
-  <div class="bn-item" data-pg="body"><span class="ico">🧘‍♀️</span>跟练</div>
-  <div class="bn-item" data-pg="weight"><span class="ico">⚖️</span>体重</div>
-  <div class="bn-item" data-pg="read"><span class="ico">📖</span>阅读</div>
-  <div class="bn-item" data-pg="quotes"><span class="ico">💛</span>语库</div>
-  <div class="bn-item" data-pg="focus"><span class="ico">🎯</span>专注</div>
-</nav>
-
-<div id="selPop" onclick="collectSel()">💛 收藏这句</div>
+<!-- 每日开启激励页 -->
+<div class="splash" id="splash">
+  <div class="bow">🎀</div>
+  <h2 id="splashTitle">早上好<span>，牙牙</span></h2>
+  <div class="dt" id="splashDate"></div>
+  <div class="quote" id="splashQuote"></div>
+  <button class="btn enter" onclick="dismissSplash()">开启今天 ✨</button>
+</div>
 
 <script>
 /* ================= 工具 ================= */
@@ -628,47 +444,34 @@ const todayStr=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMo
 const dySearch=k=>"https://www.douyin.com/search/"+encodeURIComponent(k);
 const biliSearch=k=>"https://search.bilibili.com/all?keyword="+encodeURIComponent(k);
 function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function uid(){return Date.now()+""+Math.floor(Math.random()*1000)}
 
 /* ================= 导航 ================= */
-document.querySelectorAll(".nav-item,.bn-item").forEach(n=>n.onclick=()=>go(n.dataset.pg));
+document.querySelectorAll("#navList .nav-item").forEach(n=>n.onclick=()=>go(n.dataset.pg));
 function go(pg){
-  document.querySelectorAll(".nav-item,.bn-item").forEach(n=>n.classList.toggle("active",n.dataset.pg===pg));
+  document.querySelectorAll("#navList .nav-item").forEach(n=>n.classList.toggle("active",n.dataset.pg===pg));
   document.querySelectorAll(".page").forEach(p=>p.classList.toggle("show",p.id==="pg-"+pg));
-  toggleNav(false);
-  window.scrollTo({top:0});
+  toggleNav(false);window.scrollTo({top:0});
+  if(pg==="plan")renderPlan();if(pg==="hot")renderHot(curHot);
+  if(pg==="sell")renderSell(curSell);if(pg==="body")renderBody();
+  if(pg==="weight")renderWeight();if(pg==="read")renderRead(curRead);
+  if(pg==="quotes")renderQuotes();if(pg==="focus")renderFocusStat();if(pg==="tea")renderTea();
 }
 function toggleNav(force){
-  const open = (force===undefined) ? !document.getElementById("sidebar").classList.contains("open") : force;
+  const open=(force===undefined)?!document.getElementById("sidebar").classList.contains("open"):force;
   document.getElementById("sidebar").classList.toggle("open",open);
   document.getElementById("hamburger").classList.toggle("open",open);
   document.getElementById("scrim").classList.toggle("show",open);
 }
 
-/* ================= 今日总览 ================= */
+/* ================= 每日激励页 ================= */
 const WD=["日","一","二","三","四","五","六"];
-function renderDash(){
-  const d=new Date(),h=d.getHours();
-  $("greeting").textContent=(h<5?"夜深了，注意休息":h<12?"早上好":h<14?"中午好":h<18?"下午好":"晚上好")+" 👋";
-  $("dateLine").textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 · 星期${WD[d.getDay()]} · 今天也是稳步向前的一天`;
-  const tasks=LS.get("tasks",[]).filter(t=>t.date===todayStr());
-  $("stTask").textContent=tasks.filter(t=>t.done).length+"/"+tasks.length;
-  const bd=getBodyDay();
-  $("stBody").textContent=bd.short;
-  $("stQuote").textContent=LS.get("quotes",[]).length;
-  $("todayPlan").innerHTML=`
-    🌅 <b>上午</b>：1个番茄钟刷热点找选题（带着目的刷）→ 拍摄/剪辑<br>
-    ☀️ <b>下午</b>：带货内容产出 · 写/优化1条脚本<br>
-    🧘 <b>训练</b>：${bd.plan}<br>
-    🌙 <b>晚上</b>：每日阅读15分钟 + 摘抄 → 写今日复盘 → 睡前1小时断网`;
-}
-
-/* ================= 每日开启激励页 ================= */
 const QUOTES=[
   "今天又是被你用心对待的一天，慢慢来 🌸",
   "把注意力还给生活，剩下的交给时间 💕",
   "治愈你的，从来不是大动作，而是一个个小坚持 🍓",
   "你今天的样子，会变成明天的样子 🌷",
-  "不必追赶任何人，按自己的节奏，也在变好 🌷",
+  "不必追赶任何人，按自己的节奏，也在变好 🌿",
   "你为自己花的每一分钟，都不会被辜负 💎",
   "身体会比想象中更爱你，动起来 🌿",
   "好看是一种能力，今天也能练出来 💫",
@@ -680,14 +483,8 @@ const QUOTES=[
   "重复是本事，耐心是天赋 🌱"
 ];
 const SPLASH_KEY="splashSeenDate";
-function pickQuote(dateStr){
-  let h=2166136261;
-  for(let i=0;i<dateStr.length;i++){h=(h^(dateStr.charCodeAt(i)))>>>0;h=(h*16777619)>>>0;}
-  return QUOTES[h%QUOTES.length];
-}
-function greetByHour(h){
-  if(h<5)return "夜深了，注意休息";if(h<11)return "早上好";if(h<13)return "中午好";if(h<18)return "下午好";return "晚上好";
-}
+function pickQuote(dateStr){let h=2166136261;for(let i=0;i<dateStr.length;i++){h=(h^(dateStr.charCodeAt(i)))>>>0;h=(h*16777619)>>>0;}return QUOTES[h%QUOTES.length];}
+function greetByHour(h){if(h<5)return "夜深了，注意休息";if(h<11)return "早上好";if(h<13)return "中午好";if(h<18)return "下午好";return "晚上好";}
 function showSplash(){
   const today=new Date();const ds=todayStr();
   if(LS.get(SPLASH_KEY,null)===ds){document.getElementById("splash").style.display="none";return;}
@@ -699,583 +496,474 @@ function showSplash(){
 }
 function dismissSplash(){
   const card=document.getElementById("splash");if(!card)return;
-  card.classList.add("hide");
-  setTimeout(()=>{card.style.display="none";card.classList.remove("hide");},350);
+  card.classList.add("hide");setTimeout(()=>{card.style.display="none";card.classList.remove("hide");},350);
   LS.set(SPLASH_KEY,todayStr());
 }
 
-/* ================= 体重管理 ================= */
-const WATER_TARGET=8, WATER_ML=250;
-function wLog(){return LS.get("wLog",[]);}
-function wSaveLog(a){LS.set("wLog",a);}
-function wSaveRec(date,w,fat){
-  const a=wLog();const ex=a.findIndex(r=>r.date===date);
-  const r={date,weight:w,fat:isNaN(fat)?null:fat};
-  if(ex>=0)a[ex]=r;else a.push(r);
-  a.sort((x,y)=>x.date.localeCompare(y.date));
-  wSaveLog(a);
-}
-function wLatest(){const a=wLog();return a.length?a[a.length-1]:null;}
-function calcBMI(h,w){if(!h||!w)return null;const m=h/100;return +(w/(m*m)).toFixed(1);}
-function saveWHeight(){
-  const v=parseFloat($("wHeight").value);
-  if(!v||v<80||v>250){alert("请输入正确的身高（80–250 cm）");return;}
-  LS.set("wHeight",v);$("hSaved").textContent="✅ 已保存";
-  setTimeout(()=>$("hSaved").textContent="",1800);
-  renderWeight();
-}
-function saveWRecord(){
-  const w=parseFloat($("wWeight").value),f=parseFloat($("wFat").value);
-  if(!w||w<20||w>200){alert("请输入正确的体重（20–200 kg）");return;}
-  wSaveRec(todayStr(),w,f);
-  $("wSaved").textContent="✅ 已保存到今日";
-  setTimeout(()=>$("wSaved").textContent="",1800);
-  $("wWeight").value="";$("wFat").value="";
-  renderWeight();
-}
-function waterGet(){return LS.get("water_"+todayStr(),0);}
-function waterAdd(n){
-  let v=waterGet()+n;if(v<0)v=0;if(v>24)v=24;
-  LS.set("water_"+todayStr(),v);renderWater();
-}
-function renderWater(){
-  const v=waterGet();
-  let html="";
-  for(let i=0;i<WATER_TARGET;i++){
-    html+=`<div class="water-cell ${i<v?"fill":""}">${i<v?"💧":""}</div>`;
-  }
-  $("waterGrid").innerHTML=html;
-  $("waterCnt").textContent=v;
-  $("waterML").textContent=v*WATER_ML;
-  $("waterLeft").textContent=Math.max(0,(WATER_TARGET-v)*WATER_ML);
-  const pct=Math.min(100,Math.round(v/WATER_TARGET*100));
-  $("waterPct").textContent=pct>0?`(${pct}%)`:"";
-}
-function renderWeight(){
-  $("wHeight").value=LS.get("wHeight","")||"";
-  renderWater();
-  const h=parseFloat(LS.get("wHeight",""))||0;
-  const last=wLatest();
-  if(last){
-    $("wNow").textContent=last.weight.toFixed(1);
-    $("wFatNow").textContent=last.fat!=null?last.fat.toFixed(1):"—";
-    const bmi=calcBMI(h,last.weight);
-    $("bmiNow").textContent=bmi!=null?bmi:"—";
-    if($("wWeight"))$("wWeight").value=last.weight;
-  }
-  const log=wLog().slice(-15).reverse();
-  if(!log.length){
-    $("wTrend").innerHTML='<p class="sub" style="margin:0">还没记录，今天写下第一条～</p>';
-    return;
-  }
-  let rows="";
-  for(let i=0;i<log.length;i++){
-    const r=log[i];const prev=log[i+1];
-    let ds="";
-    if(prev){
-      const d=r.weight-prev.weight;
-      ds=(d>0?"+":"")+d.toFixed(1)+"kg";
-    }else{
-      ds="—";
-    }
-    rows+=`<tr>
-      <td>${r.date.slice(5).replace("-","/")}</td>
-      <td><b>${r.weight.toFixed(1)}</b> kg</td>
-      <td>${r.fat!=null?r.fat.toFixed(1)+"%":"—"}</td>
-      <td class="delta ${prev?(r.weight<prev.weight?"down":"up"):""}">${ds}</td>
-    </tr>`;
-  }
-  $("wTrend").innerHTML=`<table class="wtab"><tr><th>日期</th><th>体重</th><th>体脂</th><th>环比</th></tr>${rows}</table>`;
-}
-
-/* ================= 任务 ================= */
-const CATC={"内容创作":["#fdeae3","#d95d2e"],"带货":["#eaf1f8","#5a7fa8"],"体态":["#e9f3ef","#5b8c7e"],"阅读":["#faf3e3","#b3861f"],"生活":["#fbedf1","#d16b86"]};
+/* ================= 每日计划 ================= */
+function tasks(){return LS.get("tasks",[]);}
 function addTask(){
-  const v=$("taskInput").value.trim();if(!v)return;
-  const tasks=LS.get("tasks",[]);
-  tasks.push({id:Date.now(),name:v,cat:$("taskCat").value,done:false,date:todayStr()});
-  LS.set("tasks",tasks);$("taskInput").value="";renderTasks();renderDash();
+  window._editingId=null;
+  const inp=$("taskInput");const name=inp.value.trim();if(!name)return;
+  const prio=$("taskPrio").value;
+  const t=tasks();t.push({id:uid(),name,cat:"待办",prio,done:false,date:todayStr()});
+  LS.set("tasks",t);inp.value="";renderPlan();
 }
-$("taskInput").addEventListener("keydown",e=>{if(e.key==="Enter")addTask()});
-function renderTasks(){
-  const tasks=LS.get("tasks",[]).filter(t=>t.date===todayStr());
-  $("taskList").innerHTML=tasks.length?tasks.map(t=>{
-    const c=CATC[t.cat]||CATC["生活"];
-    return `<div class="task-row ${t.done?"done":""}">
-      <div class="t-check" onclick="togTask(${t.id})">${t.done?"✓":""}</div>
-      <div class="t-name">${esc(t.name)}</div>
-      <span class="t-cat" style="background:${c[0]};color:${c[1]}">${t.cat}</span>
-      <span class="del-x" onclick="delTask(${t.id})">×</span></div>`;
-  }).join(""):'<div class="empty">今天还没有任务，先规划一下吧 ✍️</div>';
+function togTask(id){const t=tasks();const x=t.find(i=>i.id===id);if(x){x.done=!x.done;LS.set("tasks",t);renderPlan();}}
+function delTask(id){LS.set("tasks",tasks().filter(i=>i.id!==id));renderPlan();}
+function planStats(){
+  const t=tasks().filter(i=>i.date===todayStr());
+  const done=t.filter(i=>i.done).length;const total=t.length;
+  const pct=total?Math.round(done/total*100):0;
+  $("planRing").style.setProperty("--p",pct*3.6+"deg");
+  $("planRing").textContent=pct+"%";$("planRateNum").textContent=done+"/"+total;
 }
-function togTask(id){const ts=LS.get("tasks",[]);const t=ts.find(x=>x.id===id);if(t)t.done=!t.done;LS.set("tasks",ts);renderTasks();renderDash()}
-function delTask(id){LS.set("tasks",LS.get("tasks",[]).filter(x=>x.id!==id));renderTasks();renderDash()}
+function renderPlan(){
+  planStats();
+  const t=tasks().filter(i=>i.date===todayStr());
+  const order={high:0,mid:1,low:2};
+  t.sort((a,b)=>order[a.prio]-order[b.prio]);
+  if(!t.length){$("taskList").innerHTML='<div class="empty">今天还没有待办，添加一件开始吧 🌿</div>';return;}
+  $("taskList").innerHTML=t.map(i=>{
+    if(i.id===window._editingId){
+      return `<div class="task" data-id="${i.id}">
+        <div class="body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+          <input class="input" id="editInput" value="${esc(i.name)}" style="margin-top:0" onkeydown="if(event.key==='Enter')saveEdit('${i.id}')">
+          <select id="editPrio" style="margin-top:0">
+            <option value="high" ${i.prio==='high'?'selected':''}>高优先</option>
+            <option value="mid" ${i.prio==='mid'?'selected':''}>中优先</option>
+            <option value="low" ${i.prio==='low'?'selected':''}>低优先</option>
+          </select>
+        </div>
+        <div class="acts"><span class="edt" onclick="saveEdit('${i.id}')">💾</span><span class="del" onclick="cancelEdit()">✕</span></div>
+      </div>`;
+    }
+    return `<div class="task ${i.done?'done':''}">
+      <div class="chk ${i.done?'done':''}" onclick="togTask('${i.id}')">${i.done?'✓':''}</div>
+      <div class="body"><div class="name">${esc(i.name)}<span class="prio ${i.prio}">${i.prio==='high'?'高':i.prio==='mid'?'中':'低'}</span></div></div>
+      <div class="acts"><span class="edt" onclick="editTask('${i.id}')">✏️</span><span class="del" onclick="delTask('${i.id}')">🗑</span></div>
+    </div>`;
+  }).join("");
+  if(window._editingId){const inp=$("editInput");if(inp){inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length);}}
+}
+function editTask(id){window._editingId=id;renderPlan();}
+function cancelEdit(){window._editingId=null;renderPlan();}
+function saveEdit(id){
+  const v=$("editInput").value.trim();if(!v){cancelEdit();return;}
+  const t=tasks();const x=t.find(i=>i.id===id);
+  if(x){x.name=v;x.prio=$("editPrio").value;}
+  LS.set("tasks",t);window._editingId=null;renderPlan();
+}
 
-/* ================= 热点数据 ================= */
+/* ================= 热点灵感 ================= */
+let curHot="gesture";
 // ===== HOT_START =====
 const HOT={
 gesture:[
- {t:"迷核手势舞「小心震荡」",b:["b-fire","🔥 顶流·仍在爆发期"],d:"《无畏契约》技能衍生的手势舞持续霸榜：<b>捂鼻→摆手→比枪</b>15秒卡点组合，周翊然、范世琦、章昊、陈立农等明星接力翻跳，话题热度单日破百万。<b>拍摄建议</b>：主打「一条过挑战」+表情管理，绷不住笑场反而是流量点；加速/慢放二创空间大。",k:"迷核手势舞"},
- {t:"GGEZ手势舞",b:["b-fire","🎮 微博话题阅读2亿+"],d:"虞书欣为《灿如繁星》剧宣带火的电竞梗手势舞，檀健次、宋雨琦等明星接力，<b>0帧起跳+精准卡点</b>是模板核心，关键词搜索量暴涨1200%。<b>拍摄建议</b>：找个跳得笨拙的朋友合拍，「丝滑vs广播体操」的反差萌是互动密码。",k:"GGEZ手势舞"},
- {t:"樱花草手势舞",b:["b-new","🌸 命名挑战新贵"],d:"手势舞正从大类标签变成<b>命名挑战</b>：「樱花草」教程单条25.8万赞、12.8万收藏。一个名字+一个动作+一首歌就能加入，传播单位更小更快。<b>拍摄建议</b>：学完发「翻跳版」并带话题名，蹭精准搜索流量。",k:"樱花草手势舞"},
- {t:"鱼块摇 / 卡点新贵",b:["b-new","🐟 7月上升卡点"],d:"BGM《你要的全拿走》魔性扭腰摇手，<b>零基础友好、易出片</b>，7月短视频卡点新宠，与 Lemonade(aespa)、醋意摇同属「简单卡点摇」赛道。<b>拍摄建议</b>：标题带「教程」二字，居家/户外都能拍，闺蜜合拍涨粉快。",k:"鱼块摇 卡点舞"},
- {t:"「是不是嘛对不对嘛」甜妹手势舞",b:["b-gold","🍬 颜值区长热模板"],d:"零基础低门槛，主打<b>可爱甜系</b>，女生、闺蜜合拍持续产出中，热度稳定。<b>拍摄建议</b>：闺蜜双人位+甜系穿搭+可爱贴纸特效，涨女性粉利器。",k:"是不是嘛对不对嘛 手势舞"}
+ {t:"迷核手势舞「小心震荡」",b:["b-fire","🔥 顶流·持续霸榜"],d:"《无畏契约》技能衍生手势舞仍在爆发期：<b>捂鼻→摆手→比枪</b>15秒卡点组合，周翊然翻跳6小时点赞破百万，「小心震荡」成全网口号。<b>拍摄建议</b>：主打「一条过挑战」+表情管理，笑场翻车反而是流量点，加速/慢放二创空间大。",k:"迷核手势舞"},
+ {t:"印尼咳嗽药手势舞",b:["b-fire","🌏 暑期最强新迷因"],d:"OBH Combi广告舞两周裂变数十万条视频：<b>「咳咳咳」拟声+摇头</b>几个节拍即可完成，刘宇、鞠婧祎、汪苏泷等数十位明星接力翻跳登热搜。<b>拍摄建议</b>：带「浅跳一下」文案发翻跳版，萌娃/情侣/双胞胎变体更易被推流。",k:"印尼咳嗽药手势舞"},
+ {t:"GGEZ手势舞",b:["b-fire","🎮 微博话题阅读2亿+"],d:"虞书欣《灿如繁星》剧宣带火的电竞梗手势舞，檀健次、宋雨琦等接力，<b>0帧起跳+精准卡点</b>是模板核心，关键词搜索量暴涨1200%。<b>拍摄建议</b>：找个跳得笨拙的朋友合拍，「丝滑vs广播体操」反差萌是互动密码。",k:"GGEZ手势舞"},
+ {t:"「是不是嘛对不对嘛」甜妹手势舞",b:["b-gold","🍬 颜值区长热模板"],d:"零基础低门槛<b>可爱甜系</b>模板，女生、闺蜜合拍持续产出，热度稳定长青。<b>拍摄建议</b>：闺蜜双人位+甜系穿搭+可爱贴纸特效，涨女性粉利器。",k:"是不是嘛对不对嘛 手势舞"},
+ {t:"东南亚魔性舞蹈串烧",b:["b-new","🧩 迷因集群新玩法"],d:"印尼咳嗽舞、迷核、越南槟榔舞被并称<b>「东南亚魔性舞蹈」系列</b>，串烧连跳、合集挑战正在起量，一条视频可蹭多个话题。<b>拍摄建议</b>：拍「一口气跳完三大魔性舞」，结尾投票让观众选最上头的一个，拉评论互动。",k:"东南亚魔性舞蹈 串烧"}
 ],
 trans:[
- {t:"撕纸转场",b:["b-new","📄 跨平台新技法"],d:"从小红书火向抖音的新玩法：<b>手撕一张纸，撕开瞬间切换场景/造型</b>，零成本效果炸裂，教程类内容也在吃红利。<b>拍摄建议</b>：撕纸方向与下一镜头运动方向一致最丝滑；适合前后反差大的变装、旅行对比。",k:"撕纸转场教程"},
- {t:"AR特效「闯关式」玩法",b:["b-fire","👾 单条129万赞"],d:"「雷霆动物集体蹦迪」类AR特效把滤镜玩成<b>可命名、可连载的关卡游戏</b>，结尾留「还有第三关」钩子，小号翻拍同模板也能拿36万赞。<b>拍摄建议</b>：给玩法起短名字+留续作位，观众能复述的规则比特效本身更重要。",k:"雷霆动物集体蹦迪"},
- {t:"「白龙马行车记录仪」创意视角",b:["b-fire","🐴 播放5亿+"],d:"26版西游记带火的<b>物体第一视角</b>运镜，可迁移：宠物视角、水杯视角、镜子视角讲故事。<b>拍摄建议</b>：视角越意想不到越容易出圈，配职场/生活梗文案。",k:"白龙马行车记录仪视角"},
- {t:"热舞卡点变装转场",b:["b-gold","🧰 永不过时"],d:"迷核/GGEZ的鼓点都能套：<b>音乐重拍瞬间完成换装</b>，常用甩头遮镜、手掌盖镜、跳起落地切镜。<b>拍摄建议</b>：变装前后反差越大越好（居家vs精致），重拍前0.2秒切镜最丝滑。",k:"卡点变装转场"},
- {t:"物品竞赛叙事转场",b:["b-new","🍇 命名挑战新形式"],d:"把日常物品拍成<b>「XX选美/挑战大赛」</b>（如葡萄选美大赛），用合拍/分屏做评比接力，自带参与规则。<b>拍摄建议</b>：给物品起人设+打分标准，观众能照着拍，比纯特效更易复制。",k:"物品挑战赛 转场"}
+ {t:"撕纸转场",b:["b-new","📄 跨平台新技法"],d:"手撕一张纸，<b>撕开瞬间切换场景/造型</b>，零成本效果炸裂，教程类内容也在吃红利。<b>拍摄建议</b>：撕纸方向与下一镜头运动方向一致最丝滑，适合前后反差大的变装、旅行对比。",k:"撕纸转场教程"},
+ {t:"Drop前静音·卡点变装升级版",b:["b-fire","🔇 前3秒定生死"],d:"当前炸场类BGM黄金剪法：<b>音乐Drop前静音0.3-0.5秒</b>制造心理预期，再配「慢动作蓄力→正常速度爆发」变速，BPM140以上每拍一切。<b>拍摄建议</b>：变装前后反差越大越好，静音瞬间给面部特写，Drop落下切爆点画面。",k:"卡点变装转场"},
+ {t:"「白龙马行车记录仪」物体第一视角",b:["b-fire","🐴 播放5亿+"],d:"26版西游记带火的<b>物体第一视角</b>运镜可无限迁移：宠物视角、水杯视角、发夹视角讲故事。<b>拍摄建议</b>：视角越意想不到越容易出圈，配职场/生活梗文案食用最佳。",k:"白龙马行车记录仪视角"},
+ {t:"AR特效「闯关式」玩法",b:["b-gold","👾 单条129万赞"],d:"「雷霆动物集体蹦迪」类AR特效把滤镜玩成<b>可命名、可连载的关卡游戏</b>，结尾留「还有第三关」钩子，小号翻拍同模板也能拿36万赞。<b>拍摄建议</b>：给玩法起短名字+留续作位，观众能复述的规则比特效更重要。",k:"雷霆动物集体蹦迪"},
+ {t:"无滤镜实拍对比（景区实景通）",b:["b-new","🏞️ 平台新规红利"],d:"抖音新规要求景区发<b>无滤镜实拍</b>，「滤镜照vs实拍」前后对比正吃整治红利，真实感内容获流量倾斜。<b>拍摄建议</b>：左滤镜右实拍分屏，或用擦除转场揭穿「照骗」，暑期出游内容直接套用。",k:"景区无滤镜实拍"}
 ],
 funny:[
  {t:"26版西游记职场梗",b:["b-fire","🎭 播放5亿+"],d:"民间真人cos二创持续刷屏：<b>唐僧=画饼领导、悟空=内卷员工、八戒=摸鱼、沙僧=老好人</b>，打工人共鸣天花板。<b>拍摄建议</b>：不cos也能蹭——套人设结构拍「我们团队的四种人」「带货团队西游记」。",k:"26版西游记"},
  {t:"叹气向上挑战",b:["b-fire","😮‍💨 魔性解压顶流"],d:"台词<b>「叹气就要往上叹」</b>，音效把叹气接上《特别的爱给特别的你》旋律，翻拍量持续走高。<b>拍摄建议</b>：先演真实糟心场景（剪废视频/客户改需求），再往上一叹接旋律，共鸣+反差双杀。",k:"叹气就要往上叹"},
  {t:"「OMG你吓到我了」情绪吐槽",b:["b-fire","🎵 播放25亿+"],d:"Papi酱AI神曲《生气了》金句已独立成梗，<b>24.4万人跟拍原声</b>，综艺、影视、表情包全场景渗透。<b>拍摄建议</b>：万能破防模板——快递被偷/体重上涨/领导临时开会，任何「精神内耗瞬间」都能配。",k:"OMG你吓到我了"},
- {t:"世界杯夜宵热潮",b:["b-fire","⚽ 7月赛事带动"],d:"2026世界杯进行中，烧烤/啤酒/夜市团购/观赛零食内容集中爆发，探店与深夜美食疯狂蹭赛事流量。<b>拍摄建议</b>：做「看球夜宵清单」「一人食观赛」，带货可接零食饮料组合装，关联「熬夜护肤」种草。",k:"世界杯 夜宵 团购"},
- {t:"平台整治AI谣言·科普向",b:["b-new","🛡️ 合规新热点"],d:"抖音严查AI生成虚假灾情画面，<b>辨别AI造假</b>的科普视频正吃红利，可信度内容受流量倾斜。<b>拍摄建议</b>：用「3秒识破AI图/视频」教程切入，建立专业人设，适合知识/测评号。",k:"AI谣言 辨别 科普"}
+ {t:"「广播体操式」笨拙反差萌",b:["b-new","🤸 转发率高出58%"],d:"陈靖可跳GGEZ被嘲「第九套广播体操」反而爆火：<b>笨拙/反差类视频停留时长高43%</b>，打破完美人设制造可吐槽空间。<b>拍摄建议</b>：故意拍「教学翻车版」，一人丝滑一人僵硬，慢动作对比是二创爆点。",k:"广播体操式跳舞"},
+ {t:"平台整治AI谣言·科普向",b:["b-gold","🛡️ 合规长线热点"],d:"抖音持续严查AI虚假内容，<b>辨别AI造假</b>的科普视频吃流量倾斜，可信度内容更被推荐。<b>拍摄建议</b>：用「3秒识破AI图/视频」教程切入，建立专业人设，适合知识/测评号。",k:"AI谣言 辨别 科普"}
 ],
 bgm:[
- {t:"《生气了》- Papi酱AI神曲",b:["b-fire","🎵 全网25亿+播放"],d:"2026第一神曲，复古闽南苦情风+荒诞歌词，各类「洗歌」二创版本仍在扩散。<b>适配</b>：情绪吐槽、搞笑短剧、带货破防剧情，当前最通用的流量BGM。",k:"生气了 papi酱"},
- {t:"《晚风吹》- 陈壹千",b:["b-fire","🌆 二创视频260万+条"],d:"站内实时播放破1.2亿的现象级新热，<b>傍晚生活、户外散步、citywalk</b>场景首选。<b>适配</b>：日常vlog、氛围感慢剪、轻户外内容，情绪温柔不挑画面。",k:"晚风吹 陈壹千"},
- {t:"《迷核小曲》- 电子数拍",b:["b-fire","🎮 卡点神器"],d:"鼓点清晰、重复度高、机械感强，迷核手势舞原曲。<b>适配</b>：手势舞、卡点变装、游戏混剪，加速/慢放版都在火。",k:"迷核小曲"},
- {t:"GGEZ - 电竞梗BGM",b:["b-new","🕹️ 搜索量暴涨1200%"],d:"电竞梗「Good Game Easy」缩写，虞书欣手势舞带飞，Z世代识别度极高。<b>适配</b>：手势舞接力、游戏向内容、0帧起跳卡点视频。",k:"GGEZ"},
- {t:"《你要的全拿走》- 鱼块摇BGM",b:["b-new","🐟 7月卡点新热"],d:"鱼块摇原曲，魔性扭腰摇手配乐，<b>适配</b>：卡点舞、变装、美食/好物展示，节奏强不挑画面，二创量快速攀升。",k:"你要的全拿走 鱼块摇"},
- {t:"《山海来信》- 王源",b:["b-gold","🏔️ BGM使用量2.6亿"],d:"旅行风景类视频首选BGM，热度长期稳定。<b>适配</b>：暑期出游vlog、景区实拍、轻户外露营内容，可与「无滤镜实拍」热点叠加食用。",k:"山海来信"}
+ {t:"《生气了》- Papi酱AI神曲",b:["b-fire","🎵 全网25亿+播放"],d:"2026第一神曲，复古闽南苦情风+荒诞歌词，<b>24.4万人跟拍原声</b>，各类洗歌二创仍在扩散。<b>适配</b>：情绪吐槽、搞笑短剧、带货破防剧情，当前最通用流量BGM。",k:"生气了 papi酱"},
+ {t:"《trending》- 欧美卡点新贵",b:["b-fire","💃 BGM使用量6.7亿"],d:"超强节奏感+卡点属性，<b>二创超900万条</b>，舞蹈区与变装区新宠，百万粉创作者高频使用。<b>适配</b>：卡点变装、舞蹈翻跳、穿搭展示，Drop点清晰极易剪辑。",k:"trending BGM"},
+ {t:"《辞青》- 国风黑马",b:["b-new","🏮 使用量5.3亿·收藏200万+"],d:"国风新歌走红速度超预期，汉服、旅行博主固定BGM，<b>收藏增速全站第一</b>。<b>适配</b>：汉服变装、古镇旅拍、新中式穿搭/发饰展示，氛围感直接拉满。",k:"辞青"},
+ {t:"《迷核小曲》- 电子数拍",b:["b-gold","🎮 卡点神器"],d:"鼓点清晰、重复度高、机械感强，迷核手势舞原曲，加速/慢放版都在火。<b>适配</b>：手势舞、卡点变装、游戏混剪。",k:"迷核小曲"},
+ {t:"《谁家大美人》- DJ版",b:["b-fire","👑 全平台播放7亿+"],d:"蹦迪舞曲榜榜首，<b>搞笑变装、舞蹈卡点二创超42万条</b>，开篇直接切入重低音无冗长前奏。<b>适配</b>：变装卡点、健身、高能反转短剧，一分钟内持续高能。",k:"谁家大美人 DJ"}
 ]};
 // ===== HOT_END =====
 function renderHot(cat){
+  curHot=cat;
   $("hotList").innerHTML=HOT[cat].map(h=>`<div class="hot-card">
     <div class="hot-head"><span class="hot-title">${h.t}</span><span class="badge ${h.b[0]}">${h.b[1]}</span></div>
     <div class="hot-desc">${h.d}</div>
-    <div class="hot-links"><a href="${dySearch(h.k)}" target="_blank">▶ 去抖音看实拍</a><a href="javascript:void(0)" onclick="hotToTask('${esc(h.t)}')">＋ 加入今日任务</a></div>
+    <div class="hot-links"><a class="link" href="${dySearch(h.k)}" target="_blank">▶ 去抖音看实拍</a><a class="link" href="javascript:void(0)" onclick="hotToTask('${esc(h.t)}')">＋ 加入今日计划</a></div>
   </div>`).join("");
+  // 每日灵感推荐（按日期确定）
+  const ds=todayStr();let h=0;for(let i=0;i<ds.length;i++)h=(h+ds.charCodeAt(i))%997;
+  const pool=HOT[cat];const pick=pool[h%pool.length];
+  $("inspCard").innerHTML=`<h4>💡 今日灵感推荐（${cat==='gesture'?'手势舞':cat==='trans'?'对口型·转场':cat==='funny'?'搞笑视频':'热门BGM'}）</h4>
+    <div class="insp-line"><b>选题：</b>${pick.t}</div>
+    <div class="insp-line"><b>文案钩子：</b>用「${pick.t.split('」')[0].replace('「','')}」做开头，3秒抛出反差/痛点</div>
+    <div class="insp-line"><b>镜头思路：</b>近景表情 → 卡点动作 → 结尾定格 + 引导评论互动</div>`;
 }
 function hotToTask(name){
-  const tasks=LS.get("tasks",[]);
-  tasks.push({id:Date.now(),name:"拍摄选题：「"+name+"」",cat:"内容创作",done:false,date:todayStr()});
-  LS.set("tasks",tasks);renderTasks();renderDash();alert("已加入今日任务 ✅");
+  const t=tasks();t.push({id:uid(),name:"拍摄选题：「"+name+"」",cat:"内容创作",prio:"mid",done:false,date:todayStr()});
+  LS.set("tasks",t);alert("已加入今日计划 ✅");
 }
-$("hotTabs").querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
-  $("hotTabs").querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");renderHot(t.dataset.t);
-});
+$("hotTabs").querySelectorAll(".pill").forEach(t=>t.onclick=()=>{$("hotTabs").querySelectorAll(".pill").forEach(x=>x.classList.remove("on"));t.classList.add("on");renderHot(t.dataset.t);});
 
-/* ================= 带货：每日爆款 ================= */
+/* ================= 带货中心 ================= */
+let curSell="goods";
 // ===== GOODS_START =====
 const DAILYGOODS=[
- {t:"香水 2ml 体验装",cat:"美妆护肤",b:"b-fire",tag:"🔥 日销5-10w登顶",d:"AMOR FOCUS体验装力压面膜底妆登顶7.20日榜，GMV破100w、排名跃升1500位。<b>可借鉴</b>：高决策成本品类拆小规格卖「入门装」，把试错门槛打到最低；配达人直播间高强度互动话术，完成种草→转化闭环。这个思路可迁移到任何高单价选品。"},
- {t:"贴片面膜 · 溯源直播专场",cat:"美妆护肤",b:"b-fire",tag:"🧖 霸榜半壁江山",d:"美迪惠尔、VEIRFOO、JM肌司研靠<b>韩国溯源专场+多盒套组</b>连续霸榜，单品GMV 100w+。<b>可借鉴</b>：①信任背书内容（溯源/工厂实拍）是面膜爆量前提；②多件装拉高客单，销量不顶尖GMV照样领跑；③夏季主打「晒后急救、深层清洁」场景词。"},
- {t:"轻户外全线爆发",cat:"轻户外/运动",b:"b-fire",tag:"⛺ 半年10亿单·官方盖章",d:"7.23官方报告：速开沙滩帐+359%、钛锅+325%、卡式炉+302%、喷雾水杯+256%、匹克球+229%、桨板+203%；「玩水」搜索量环比+61%。<b>可借鉴</b>：①「公园mini露营」「溪边玩水」场景内容红利大；②短视频体裁带动销售额+71%，最适合短视频带货切入；③小镇青年、新锐白领是主力人群。"},
- {t:"夏日不脱妆底妆",cat:"美妆护肤",b:"b-gold",tag:"☀️ 季节刚需持续在榜",d:"烙色雨衣气垫、19.9元养肤气垫靠<b>防水防汗控油</b>持续冲榜。<b>可借鉴</b>：底妆的胜负手是「可视化效果」——8小时持妆实测、油皮暴晒对比，比讲成分转化高得多；卖点必须绑定具体夏日场景（通勤暴晒/出游/健身）。"},
- {t:"男士护肤 · 蓝海增量",cat:"美妆护肤",b:"b-new",tag:"🧔 双品冲进日榜前十",d:"韩束男士控油精华、小白泥洁面借「23周年庆+央广网权威直播间」同日双品进前十。<b>可借鉴</b>：男士「控油、焕亮」需求夏季暴涨且竞争小，女号可拍「给男朋友/老公买」的送礼视角切入。"},
- {t:"功效型长销品 · 稳定盘",cat:"美妆护肤",b:"b-gold",tag:"📈 反脉冲打法",d:"白云山烟酰胺凝胶、自然堂洁面、植物大师祛痘膏不靠达人脉冲，靠<b>明确功效表达+品牌自播</b>稳定在榜。<b>可借鉴</b>：日更店播/短视频承接品类搜索流量，比赌一条爆款更长久；跟品前连续观察3-7天，避免误判单日脉冲为长期趋势。"},
- {t:"世界杯观赛零食·夜宵团购",cat:"食品饮料",b:"b-fire",tag:"⚽ 赛事季刚需爆发",d:"2026世界杯进行中，深夜美食、啤酒饮料、速食小吃、便携冰杯内容集中爆发，团购带货红利大。<b>可借鉴</b>：①做「看球夜宵清单」「一人食观赛」场景短视频；②零食+饮料组合装拉高客单；③关联「熬夜护肤」做跨品类种草，承接赛事流量。"}
+ {t:"高客单面膜套组（5片×5盒）",cat:"美妆护肤",b:"b-fire",tag:"🔥 单日GMV破百万",d:"isntree紫洋葱面膜以「5片×5盒」套组登顶美妆日榜：<b>多件装拉高客单，销量非顶尖GMV照样领跑</b>。<b>可借鉴</b>：海外新品牌冷启动=垂类头部达人溯源专场+高客单套组，降低决策门槛；面膜类信任背书内容（溯源/工厂实拍）是爆量前提。"},
+ {t:"达人IP联名气垫",cat:"美妆护肤",b:"b-fire",tag:"💄 回归首秀单日100w+",d:"蒂洛薇「韩美娟专属」气垫借达人回归首秀爆发，1-2.5w销量即达成100w+ GMV。<b>可借鉴</b>：强个人属性达人的「专属定制/首发权益」能显著提升转化；夏季气垫主打「一拍即白、控油持妆」可视化效果，直播演示缩短决策路径。"},
+ {t:"凉感经济全线爆发",cat:"夏季刚需",b:"b-fire",tag:"🧊 凉感话题播放8.6亿",d:"凉感冰巾、凉感被、冰凉项圈、凉感喷雾全渠道卖爆：清凉寝具环比+234%、清凉服饰+73%，凉感眼罩卖到断货。<b>可借鉴</b>：①拍「一敷降温」实测对比的可视化内容；②绑定演唱会/露天观演/通勤暴晒场景；③小件低客单最适合短视频冲量。"},
+ {t:"轻户外持续高热",cat:"轻户外/运动",b:"b-gold",tag:"⛺ 半年10亿单·官方盖章",d:"官方报告：速开沙滩帐+359%、钛锅+325%、卡式炉+302%、喷雾水杯+256%、匹克球+229%。<b>可借鉴</b>：「公园mini露营」「溪边玩水」场景内容红利大；短视频体裁带动销售额+71%，小镇青年与新锐白领是主力人群。"},
+ {t:"教辅「书课包」",cat:"图书教育",b:"b-new",tag:"📚 环比增速83.3%领跑",d:"暑期教辅冲高，书课包（纸质书+课程服务）以<b>83.3%环比增速领跑全品类</b>，小学学段占31.4%。<b>可借鉴</b>：达人场景化讲解+分龄推荐+学习规划种草最易转化家长；直播是第一销售通路，暑期衔接/预习是黄金选题。"},
+ {t:"美白祛斑功效护肤",cat:"美妆护肤",b:"b-gold",tag:"📈 日榜Top10占7席",d:"美白、祛斑、淡印功效词高频霸榜，点斑液、美白精华持续在榜。<b>可借鉴</b>：高竞争功效赛道拼的是<b>真实验证内容</b>（28天打卡实测），高佣金≠高转化；夏季叠加「晒后修护」场景词流量更大。"}
 ];
 // ===== GOODS_END =====
-
 // ===== HAIR_START =====
 const HAIR=[
- {t:"醋酸鲨鱼夹 · 慵懒高级感",b:"b-fire",tag:"🔥 日销10w+常青爆款",script:"【0-3s钩子】\"头发多又厚、发卡永远夹不住的姐妹看过来\"＋手拿夹子怼脸特写\n【3-10s痛点】演示普通小卡子一夹就塌、头皮被勒红\n【10-25s卖点】换上醋酸大鲨鱼夹，单手一扣夹住全部头发，金属光泽显贵气\n【25s-结尾】\"早八30秒出门、约会也撑得住，点左下角同款\"",sell:"大容量齿纹夹得稳厚发不滑；醋酸/金属质感高级不廉价；不夹头皮、不扯断发；多色可搭不同风格",pain:"头发多夹子夹不住；廉价发卡显土显廉价；出门造型费时间；细皮筋勒出头疼印",k:"醋酸鲨鱼夹 发型教程"},
- {t:"大肠发圈 · 法式复古",b:"b-new",tag:"🆕 多巴胺穿搭带动回潮",script:"【0-3s钩子】\"还在用勒头发的皮筋？难怪发际线后移\"\n【中段】展示大肠圈松松扎低马尾，配通勤/碎花裙，氛围感拉满\n【结尾】\"一套多色换着戴，9.9三件，评论区置顶\"",sell:"真丝/雪纺面料不伤发不留痕；法式慵懒显发量；多色搭配衣服；手作质感出片",pain:"普通皮筋勒头发留深痕、扯掉碎发；普通发圈显土不上镜；发量少显秃",k:"大肠发圈 穿搭"},
- {t:"磨砂抓夹 · 3秒盘发",b:"b-fire",tag:"🔥 早八通勤神器",script:"【0-3s钩子】\"上班要迟到？3秒搞定气质盘发\"\n【中段】实拍抓夹一抓一扭成低丸子，锯齿防滑演示甩头不掉\n【结尾】\"通勤约会都合适，今天个位数\"",sell:"锯齿内扣强力防滑、甩头不掉；磨砂哑光质感高级；3秒盘发省时；小脸显瘦",pain:"夹子打滑总是掉；盘发费时又手残；夹子显头大不显脸小",k:"抓夹 盘发教程"},
- {t:"蝴蝶结发夹 · 公主减龄",b:"b-gold",tag:"💛 拍照出片王",script:"【0-3s钩子】\"一根夹子让你回到18岁\"\n【中段】侧边夹蝴蝶结＋随手自拍对比，亚克力反光出片\n【结尾】\"约会/毕业照都靠它，点小黄车\"",sell:"亚克力/丝绒材质反光出片；减龄显嫩；侧夹修饰脸型；小众设计不撞款",pain:"夹子塑料感易断；不显脸小反显头重；拍照不上镜",k:"蝴蝶结发夹 拍照"},
- {t:"八字刘海定位夹 · 直播同款",b:"b-new",tag:"🆕 氛围感刘海刚需",script:"【0-3s钩子】\"刘海塌成条形码？一夹救回来\"\n【中段】展示八字夹把刘海夹出蓬松弧度，配怼脸特写\n【结尾】\"同款定位夹今天福利价\"",sell:"定型持久不塌；小夹子隐形不突兀；营造蓬松八字刘海；直播同款有跟风效应",pain:"刘海贴头皮显脸圆；夹子留印、取下发型塌；定型产品油腻",k:"八字夹 刘海定型"}
+ {t:"缎面大蝴蝶结鲨鱼夹 · 清冷黑/奶杏色",b:"b-fire",tag:"🔥 低成本氛围感天花板",script:"【0-3s钩子】「后脑勺扁、脖子短的姐妹，这个夹子就是你的救星」+后脑勺扁塌特写\n【中段】演示慵懒低盘半扎发：中下位头发扭转内扣，鲨鱼夹一夹，大蝴蝶结垂在脑后，扯松颅顶碎发秒变头包脸\n【结尾】「黑色清冷、奶杏显白，通勤一整天不滑落，点左下角两色都带走」",sell:"缎面质感自带贵气不廉价；纵向拉长脖颈线条、头包脸显脸小；黑/奶杏两色配西装配裙子都百搭；夹力强通勤一天不掉",pain:"后脑勺扁平头型难看；圆脸方脸戴啥都显脸大；发饰廉价拉低整套穿搭档次；普通夹子半天就松垮滑落",k:"缎面蝴蝶结鲨鱼夹"},
+ {t:"褶皱雪纺网纱蝴蝶结马尾夹 · 韩系",b:"b-fire",tag:"📈 实测单日热销1500+件",script:"【0-3s钩子】「马尾一扎就塌？那是你没用对夹子」+扁塌马尾怼脸对比\n【中段】高马尾根部夹上网纱蝴蝶结，瞬间半扎发变高级，甩头/跑跳演示不掉不歪\n【结尾】「达人都在推的韩版爆款，日销一千多个，现在拍下还送同色皮筋」",sell:"多层网纱灵动显发量；半扎/高马尾两用一夹两造型；褶皱雪纺不易皱好打理；单价低随手就能下单",pain:"马尾扁塌没精神显发量少；纯皮筋扎发太单调不上镜；细软发怎么扎都不出效果；贵价发饰舍不得日常戴",k:"雪纺蝴蝶结马尾夹"},
+ {t:"镂空金属蝴蝶抓夹 · 轻奢七夕款",b:"b-new",tag:"🎁 夏季销量同比+137%",script:"【0-3s钩子】「七夕送女朋友别再送口红了，这个她天天都会戴」\n【中段】金属蝴蝶镂空细节特写，双点卡扣一扣锁住发根，跑跳不掉；通勤/约会两种盘发演示\n【结尾】「高颅顶显脸小，礼盒装拍下就发，评论区扣『七夕』抽同款」",sell:"金属镂空轻盈不闷热、轻奢高级感强；双点支撑卡扣运动不掉；高颅顶显脸小；自带礼盒适合送礼",pain:"夏天头发黏汗普通夹子根本固定不住；七夕送礼选品头疼怕踩雷；塑料夹显廉价拿不出手；长时间佩戴头皮被压得疼",k:"金属蝴蝶抓夹"},
+ {t:"真丝大肠发圈 · 夏季不伤发",b:"b-gold",tag:"🪺 敏感头皮回购王",script:"【0-3s钩子】「天天掉头发？先看看你手腕上那根皮筋」\n【中段】对比实验：普通皮筋扯下带断发+深勒痕 vs 真丝大肠圈顺滑取下零断发；低马尾+丸子头两个造型示范\n【结尾】「22姆米真丝透气凉感，夏天戴也不闷，三色一套，今天直播间划到底价」",sell:"100%桑蚕丝顺滑零摩擦不断发；透气凉感适合夏天与敏感头皮；法式慵懒显发量好出片；多色成套性价比高",pain:"皮筋勒痕深还扯断发、发际线焦虑；发量少扎发显秃；夏天发圈闷汗头皮痒；便宜发圈起球显土",k:"真丝大肠发圈"},
+ {t:"水钻重工鲨鱼夹 · 派对出片款",b:"b-new",tag:"✨ 约会拍照氛围神器",script:"【0-3s钩子】「拍照总觉得头上少点东西？就是少了它」+灯光下水钻反光特写\n【中段】随手一个法式低盘发，夹上13cm水钻鲨鱼夹，室内室外打光展示blingbling出片效果\n【结尾】「演唱会、约会、毕业照全靠它，39.9还要什么自行车，小黄车1号链接」",sell:"重工水钻灯光下超上镜、氛围感拉满；13cm大号稳固厚发一低头也不散；一夹搞定造型省下做头发的钱；单价不高出片率极高",pain:"拍照造型单调不上镜；做一次头发太贵太费时；廉价水钻掉钻当场尴尬；发量厚普通夹子夹不住",k:"水钻鲨鱼夹"}
 ];
 // ===== HAIR_END =====
-function renderHair(){
-  $("hairList").innerHTML=HAIR.map(h=>`<div class="hair-card">
-    <div class="hair-head"><span class="hair-title">${h.t}</span><span class="badge ${h.b}">${h.tag}</span></div>
-    <div class="hair-block"><span class="lab">🪝 爆款文案脚本</span><div style="white-space:pre-line">${h.script}</div></div>
-    <div class="hair-grid">
-      <div class="hair-block"><span class="lab">💎 卖点</span><div>${h.sell}</div></div>
-      <div class="hair-block"><span class="lab">💢 痛点</span><div>${h.pain}</div></div>
-    </div>
-    <div class="hair-links"><a href="${dySearch(h.k)}" target="_blank">▶ 去抖音看原视频</a><span class="hair-k">搜索词：${h.k}</span></div>
+function renderSell(s){
+  curSell=s;
+  const box=$("sellBox");
+  if(s==="goods")return renderGoods();
+  if(s==="myprod")return renderMyProd();
+  if(s==="script")return renderScript();
+  if(s==="review")return renderReview();
+  if(s==="bench")return renderBench();
+}
+$("sellTabs").querySelectorAll(".pill").forEach(t=>t.onclick=()=>{$("sellTabs").querySelectorAll(".pill").forEach(x=>x.classList.remove("on"));t.classList.add("on");renderSell(t.dataset.s);});
+
+function renderGoods(){
+  let html=`<div class="subtabs" id="gTabs">
+    <span class="pill on" data-g="all">全部</span><span class="pill" data-g="goods">商品爆款</span><span class="pill" data-g="hair">发饰爆款</span></div>
+    <div class="row" style="margin-bottom:10px"><input class="input" id="gSearch" placeholder="🔍 搜索商品 / 卖点 / 痛点" oninput="renderGoodsFilter()"></div>
+    <div id="gList"></div>`;
+  $("sellBox").innerHTML=html;
+  window._gFilter="all";
+  renderGoodsFilter();
+  $("gTabs").querySelectorAll(".pill").forEach(t=>t.onclick=()=>{$("gTabs").querySelectorAll(".pill").forEach(x=>x.classList.remove("on"));t.classList.add("on");window._gFilter=t.dataset.g;renderGoodsFilter();});
+}
+function renderGoodsFilter(){
+  const f=(window._gFilter||"all");const q=($("gSearch")?$("gSearch").value.toLowerCase():"");
+  let items=[];
+  if(f==="all"||f==="goods")DAILYGOODS.forEach(g=>items.push({type:"商品",t:g.t,tag:g.tag,b:g.b,d:g.d,k:g.cat}));
+  if(f==="all"||f==="hair")HAIR.forEach(h=>items.push({type:"发饰",t:h.t,tag:h.tag,b:h.b,d:"卖点："+h.sell+"<br>痛点："+h.pain,k:h.k}));
+  if(q)items=items.filter(i=>i.t.toLowerCase().includes(q)||i.d.toLowerCase().includes(q)||i.tag.toLowerCase().includes(q));
+  if(!items.length){$("gList").innerHTML='<div class="empty">没有匹配的内容</div>';return;}
+  $("gList").innerHTML=items.map(i=>`<div class="goods-card">
+    <h4>${i.t} <span class="tag">${i.type}</span><span class="badge ${i.b}">${i.tag}</span></h4>
+    <div class="kv">${i.d}</div>
+    <div class="hot-links"><a class="link" href="${dySearch(i.k)}" target="_blank">▶ 去抖音看原视频</a></div>
   </div>`).join("");
 }
-
-function renderDailyGoods(){
-  $("dailyHotGoods").innerHTML=DAILYGOODS.map(g=>`<div class="hot-card">
-    <div class="hot-head"><span class="hot-title">${g.t}</span><span class="badge ${g.b}">${g.tag}</span><span class="badge b-blue">${g.cat}</span></div>
-    <div class="hot-desc">${g.d}</div>
-    <div class="hot-links"><a href="${dySearch(g.t.split(" ")[0])}" target="_blank">▶ 抖音看同类视频</a></div>
-  </div>`).join("");
+function renderMyProd(){
+  const list=LS.get("myProds",[]);
+  let html=`<div class="card tight" style="margin-bottom:12px">
+    <label class="fld">商品名称</label><input class="input" id="mpName" placeholder="如：复古木耳边发箍">
+    <label class="fld">核心卖点</label><textarea class="textarea" id="mpSell" placeholder="用户为什么买它"></textarea>
+    <label class="fld">击中痛点</label><textarea class="textarea" id="mpPain" placeholder="它解决了什么难受"></textarea>
+    <button class="btn sm" style="margin-top:8px" onclick="addMyProd()">＋ 保存到选品库</button>
+  </div><div id="mpList"></div>`;
+  $("sellBox").innerHTML=html;
+  $("mpList").innerHTML=list.length?list.map(p=>`<div class="prod-item"><div class="ttl">${esc(p.name)}<span class="del" onclick="delMyProd('${p.id}')">🗑</span></div><div class="kv"><b>卖点：</b>${esc(p.sell)}</div><div class="kv"><b>痛点：</b>${esc(p.pain)}</div></div>`).join(""):'<div class="empty">选品库还是空的，录入第一个吧</div>';
 }
-
-/* ================= 带货：选品库 ================= */
-function addProduct(){
-  const name=$("pName").value.trim();if(!name)return alert("先填商品名称");
-  const ps=LS.get("prods",[]);
-  ps.unshift({id:Date.now(),name,cat:$("pCat").value,price:$("pPrice").value,who:$("pWho").value.trim(),sell:$("pSell").value.trim(),pain:$("pPain").value.trim(),date:todayStr()});
-  LS.set("prods",ps);["pName","pWho","pSell","pPain"].forEach(i=>$(i).value="");
-  renderProds();renderProdStats();alert("已保存 ✅");
+function addMyProd(){
+  const name=$("mpName").value.trim();if(!name)return;
+  const list=LS.get("myProds",[]);list.push({id:uid(),name,sell:$("mpSell").value.trim(),pain:$("mpPain").value.trim()});
+  LS.set("myProds",list);$("mpName").value="";$("mpSell").value="";$("mpPain").value="";renderMyProd();
 }
-function renderProds(){
-  const ps=LS.get("prods",[]);
-  $("prodList").innerHTML=ps.length?ps.map(p=>`<div class="item-card">
-    <div class="item-top"><div><span class="item-title">${esc(p.name)}</span>
-      <span class="badge b-blue" style="margin-left:8px">${p.cat}</span>
-      <span class="badge b-gold">${p.price}</span></div>
-      <span class="del-x" onclick="delProd(${p.id})">×</span></div>
-    <div class="kv">${p.who?`<b>👥 人群：</b>${esc(p.who)}<br>`:""}<b>💎 卖点：</b>${esc(p.sell)||"—"}<br><b>💢 痛点：</b>${esc(p.pain)||"—"}<br><span style="font-size:11px;color:#c4b8a8">录入于 ${p.date}</span></div>
-  </div>`).join(""):'<div class="empty">还没有选品，添加第一个吧 🧺</div>';
+function delMyProd(id){LS.set("myProds",LS.get("myProds",[]).filter(p=>p.id!==id));renderMyProd();}
+function renderScript(){
+  const list=LS.get("scripts",[]);
+  let html=`<div class="card tight" style="margin-bottom:12px">
+    <label class="fld">标题</label><input class="input" id="scTitle" placeholder="如：发饰开场3秒钩子脚本">
+    <label class="fld">原视频链接（可空，便于回看）</label><input class="input" id="scLink" placeholder="抖音视频链接">
+    <label class="fld">脚本正文（通用逻辑：钩子→痛点→卖点→促单）</label><textarea class="textarea" id="scBody" placeholder="0-3s 钩子…\n中段…\n结尾促单…"></textarea>
+    <button class="btn sm" style="margin-top:8px" onclick="addScript()">＋ 保存脚本</button>
+  </div><div id="scList"></div>`;
+  $("sellBox").innerHTML=html;
+  $("scList").innerHTML=list.length?list.map(s=>`<div class="script-item"><div class="ttl">${esc(s.title)}<span class="del" onclick="delScript('${s.id}')">🗑</span></div>${s.link?`<div class="kv"><a class="link" href="${esc(s.link)}" target="_blank">▶ 原视频</a></div>`:''}<div class="script-box">${esc(s.body)}</div></div>`).join(""):'<div class="empty">还没有脚本，写一条试试</div>';
 }
-function delProd(id){if(!confirm("删除这个选品？"))return;LS.set("prods",LS.get("prods",[]).filter(x=>x.id!==id));renderProds();renderProdStats()}
-
-/* ================= 带货：脚本 ================= */
 function addScript(){
-  const t=$("scTitle").value.trim();if(!t)return alert("先填脚本标题");
-  const ss=LS.get("scripts",[]);
-  ss.unshift({id:Date.now(),title:t,prod:$("scProd").value.trim(),hook:$("scHook").value.trim(),pain:$("scPain").value.trim(),sell:$("scSell").value.trim(),trust:$("scTrust").value.trim(),cta:$("scCta").value.trim(),date:todayStr()});
-  LS.set("scripts",ss);["scTitle","scProd","scHook","scPain","scSell","scTrust","scCta"].forEach(i=>$(i).value="");
-  renderScripts();alert("脚本已保存 ✅");
+  const title=$("scTitle").value.trim();if(!title)return;
+  const list=LS.get("scripts",[]);list.push({id:uid(),title,link:$("scLink").value.trim(),body:$("scBody").value});
+  LS.set("scripts",list);$("scTitle").value="";$("scLink").value="";$("scBody").value="";renderScript();
 }
-function renderScripts(){
-  const ss=LS.get("scripts",[]);
-  $("scriptList").innerHTML=ss.length?ss.map(s=>`<div class="item-card">
-    <div class="item-top"><div><span class="item-title">📄 ${esc(s.title)}</span>${s.prod?`<span class="badge b-blue" style="margin-left:8px">${esc(s.prod)}</span>`:""}</div>
-    <span class="del-x" onclick="delScript(${s.id})">×</span></div>
-    <div class="kv">
-    ${s.hook?`<b>🪝 钩子：</b>${esc(s.hook)}<br>`:""}${s.pain?`<b>💢 痛点：</b>${esc(s.pain)}<br>`:""}
-    ${s.sell?`<b>💎 卖点：</b>${esc(s.sell)}<br>`:""}${s.trust?`<b>🤝 信任：</b>${esc(s.trust)}<br>`:""}
-    ${s.cta?`<b>📣 催单：</b>${esc(s.cta)}<br>`:""}<span style="font-size:11px;color:#c4b8a8">${s.date}</span></div>
-  </div>`).join(""):'<div class="empty">还没写过脚本，用上面的公式开一条 ✍️</div>';
+function delScript(id){LS.set("scripts",LS.get("scripts",[]).filter(s=>s.id!==id));renderScript();}
+function renderReview(){
+  const list=LS.get("reviews",[]);
+  let html=`<div class="card tight" style="margin-bottom:12px">
+    <label class="fld">发布日期</label><input class="input" id="rvDate" type="date" value="${todayStr()}">
+    <label class="fld">原视频链接（可空）</label><input class="input" id="rvLink" placeholder="抖音视频链接">
+    <label class="fld">数据（播放 / 点赞 / 评论）</label><div class="row"><input class="input" id="rvView" placeholder="播放"><input class="input" id="rvLike" placeholder="点赞"><input class="input" id="rvComm" placeholder="评论"></div>
+    <label class="fld">做得好的（优点）</label><textarea class="textarea" id="rvGood"></textarea>
+    <label class="fld">待改进的（不足）</label><textarea class="textarea" id="rvBad"></textarea>
+    <label class="fld">下一条优化方向</label><textarea class="textarea" id="rvPlan"></textarea>
+    <button class="btn sm" style="margin-top:8px" onclick="addReview()">＋ 沉淀复盘</button>
+  </div><div id="rvList"></div>`;
+  $("sellBox").innerHTML=html;
+  $("rvList").innerHTML=list.length?list.slice().reverse().map(r=>`<div class="review-item"><div class="ttl">${r.date}<span class="del" onclick="delReview('${r.id}')">🗑</span></div>
+    <div class="kv">📊 播放 ${r.view||'—'} · 赞 ${r.like||'—'} · 评 ${r.comm||'—'}${r.link?` · <a class="link" href="${esc(r.link)}" target="_blank">原视频</a>`:''}</div>
+    <div class="kv"><b>✅ 优点：</b>${esc(r.good)}</div><div class="kv"><b>⚠️ 不足：</b>${esc(r.bad)}</div><div class="kv"><b>🎯 优化：</b>${esc(r.plan)}</div></div>`).join(""):'<div class="empty">还没有复盘记录</div>';
 }
-function delScript(id){if(!confirm("删除这条脚本？"))return;LS.set("scripts",LS.get("scripts",[]).filter(x=>x.id!==id));renderScripts()}
-
-/* ================= 带货：复盘 ================= */
 function addReview(){
-  const d=$("rvDate").value||todayStr();
-  if(!$("rvGood").value.trim()&&!$("rvBad").value.trim())return alert("至少写一点内容");
-  const rs=LS.get("reviews",[]);
-  rs.unshift({id:Date.now(),date:d,data:$("rvData").value.trim(),good:$("rvGood").value.trim(),bad:$("rvBad").value.trim(),how:$("rvHow").value.trim()});
-  LS.set("reviews",rs);["rvData","rvGood","rvBad","rvHow"].forEach(i=>$(i).value="");
-  renderReviews();alert("复盘已保存，明天会更好 🌙");
+  const list=LS.get("reviews",[]);list.push({id:uid(),date:$("rvDate").value||todayStr(),link:$("rvLink").value.trim(),view:$("rvView").value,like:$("rvLike").value,comm:$("rvComm").value,good:$("rvGood").value,bad:$("rvBad").value,plan:$("rvPlan").value});
+  LS.set("reviews",list);renderReview();
 }
-function renderReviews(){
-  const rs=LS.get("reviews",[]);
-  $("reviewList").innerHTML=rs.length?rs.map(r=>`<div class="item-card">
-    <div class="item-top"><span class="item-title">🌙 ${r.date} 复盘</span><span class="del-x" onclick="delReview(${r.id})">×</span></div>
-    <div class="kv">${r.data?`<b>📊 数据：</b>${esc(r.data)}<br>`:""}${r.good?`<b>✅ 做得好：</b>${esc(r.good)}<br>`:""}
-    ${r.bad?`<b>🔍 待优化：</b>${esc(r.bad)}<br>`:""}${r.how?`<b>🛠️ 怎么改：</b>${esc(r.how)}`:""}</div>
-  </div>`).join(""):'<div class="empty">还没有复盘记录。每天5分钟复盘，是进步最快的方式 🌱</div>';
+function delReview(id){LS.set("reviews",LS.get("reviews",[]).filter(r=>r.id!==id));renderReview();}
+function renderBench(){
+  const list=LS.get("benchmarks",[]);
+  let html=`<div class="card tight" style="margin-bottom:12px">
+    <label class="fld">账号名 / 视频标题</label><input class="input" id="bmName" placeholder="如：@某某带货号">
+    <label class="fld">主页 / 视频链接</label><input class="input" id="bmLink" placeholder="抖音链接">
+    <label class="fld">内容风格定位</label><input class="input" id="bmStyle" placeholder="如：甜妹种草 / 专业测评">
+    <label class="fld">开头钩子怎么做的</label><textarea class="textarea" id="bmHook"></textarea>
+    <label class="fld">脚本逻辑亮点</label><textarea class="textarea" id="bmLogic"></textarea>
+    <label class="fld">我可借鉴的点</label><textarea class="textarea" id="bmLearn"></textarea>
+    <button class="btn sm" style="margin-top:8px" onclick="addBench()">＋ 保存对标</button>
+  </div><div id="bmList"></div>`;
+  $("sellBox").innerHTML=html;
+  $("bmList").innerHTML=list.length?list.map(b=>`<div class="bench-item"><div class="ttl">${esc(b.name)}<span class="del" onclick="delBench('${b.id}')">🗑</span></div>
+    ${b.link?`<div class="kv"><a class="link" href="${esc(b.link)}" target="_blank">▶ 打开主页/视频</a></div>`:''}
+    <div class="kv"><b>风格：</b>${esc(b.style)}</div><div class="kv"><b>钩子：</b>${esc(b.hook)}</div><div class="kv"><b>逻辑：</b>${esc(b.logic)}</div><div class="kv"><b>借鉴：</b>${esc(b.learn)}</div></div>`).join(""):'<div class="empty">录入一个对标账号，慢慢建你的参考库</div>';
 }
-function delReview(id){if(!confirm("删除这条复盘？"))return;LS.set("reviews",LS.get("reviews",[]).filter(x=>x.id!==id));renderReviews()}
-
-/* ================= 带货：总结 ================= */
-function renderProdStats(){
-  const ps=LS.get("prods",[]);
-  if(!ps.length){$("prodStats").innerHTML='<span style="color:#c4b8a8">选品库还是空的，先去「我的选品库」添加几个商品，这里会自动生成画像。</span>';return}
-  const cnt=o=>Object.entries(o).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k}（${v}个）`).join("、");
-  const cats={},prices={};ps.forEach(p=>{cats[p.cat]=(cats[p.cat]||0)+1;prices[p.price]=(prices[p.price]||0)+1});
-  const kw={};ps.forEach(p=>((p.sell||"")+(p.pain||"")).replace(/[，。、！？\s,.!?；;]/g," ").split(" ").filter(w=>w.length>=2).forEach(w=>kw[w]=(kw[w]||0)+1));
-  const topKw=Object.entries(kw).filter(([k,v])=>v>=2).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([k])=>k);
-  $("prodStats").innerHTML=`<b>📦 共录入：</b>${ps.length} 个选品<br>
-  <b>🗂️ 类目分布：</b>${cnt(cats)}<br>
-  <b>💰 价格带分布：</b>${cnt(prices)}<br>
-  ${topKw.length?`<b>🔤 卖点/痛点高频词：</b>${topKw.join("、")}<br>`:""}
-  <span style="font-size:12px;color:var(--ink2)">💡 高频词代表你选品的隐性偏好——如果某类词的品复盘数据一直不好，下次选品就要刻意避开。</span>`;
+function addBench(){
+  const name=$("bmName").value.trim();if(!name)return;
+  const list=LS.get("benchmarks",[]);list.push({id:uid(),name,link:$("bmLink").value.trim(),style:$("bmStyle").value.trim(),hook:$("bmHook").value,logic:$("bmLogic").value,learn:$("bmLearn").value});
+  LS.set("benchmarks",list);$("bmName").value="";$("bmLink").value="";$("bmStyle").value="";$("bmHook").value="";$("bmLogic").value="";$("bmLearn").value="";renderBench();
 }
-function saveSumNote(){LS.set("sumNote",$("sumNote").value);$("sumSaved").textContent="✓ 已保存 "+new Date().toLocaleTimeString();setTimeout(()=>$("sumSaved").textContent="",3000)}
-
-/* shop tabs */
-$("shopTabs").querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
-  $("shopTabs").querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");
-  document.querySelectorAll(".shop-sec").forEach(s=>s.style.display="none");
-  $("shop-"+t.dataset.t).style.display="block";
-  if(t.dataset.t==="summary")renderProdStats();
-});
+function delBench(id){LS.set("benchmarks",LS.get("benchmarks",[]).filter(b=>b.id!==id));renderBench();}
 
 /* ================= 体态跟练 ================= */
-const BODYPLAN=[
- {name:"Day 1 · 上半身修复日",short:"练·上半身",focus:"脖子前倾 + 驼背（上交叉综合征）｜放松紧张的胸肌斜方肌，唤醒无力的深层颈屈肌和背肌",vids:[
-  ["颈部前倾矫正 10分钟","搜：美丽芭蕾 天鹅颈 / 颈前倾矫正","颈前倾矫正 天鹅颈"],
-  ["开肩美背 15分钟","搜：欧阳春晓 开肩 / 周六野 圆肩驼背","开肩美背 圆肩驼背矫正"],
-  ["靠墙天使+胸椎灵活 8分钟","激活下斜方肌，收下巴找\"双下巴\"感觉","靠墙天使 胸椎灵活性"]]},
- {name:"Day 2 · 下半身矫正日",short:"练·骨盆核心",focus:"骨盆前倾 + 小肚子突出（下交叉综合征）｜拉伸紧张的髂腰肌竖脊肌，强化臀肌和深层腹肌",vids:[
-  ["骨盆前倾矫正 15分钟","搜：周六野 骨盆前倾 / 假胯宽矫正","骨盆前倾矫正"],
-  ["死虫式+臀桥核心激活 10分钟","深层腹横肌训练，比卷腹更适合你","死虫式 臀桥 核心激活"],
-  ["髂腰肌拉伸 5分钟","久坐必做，缓解腰部代偿酸痛","髂腰肌拉伸"]]},
- {name:"Day 3 · 全身燃脂日",short:"练·全身燃脂",focus:"小基数减脂｜低冲击HIIT保护关节，配合全身拉伸，不掉肌肉地降体脂",vids:[
-  ["低冲击全身燃脂 20分钟","搜：帕梅拉 低冲击燃脂（无跳跃版）","帕梅拉 低冲击燃脂 20分钟"],
-  ["站立瘦腹 10分钟","不伤腰的腹部训练，适合骨盆前倾人群","站立瘦腹 10分钟"],
-  ["全身舒缓拉伸 10分钟","训练日收尾，帮助肌肉线条流畅","帕梅拉 全身拉伸 10分钟"]]},
- {name:"Day 4 · 休息日",short:"休息 💤",focus:"主动恢复｜散步、泡脚、早睡。肌肉在休息时生长，体态在放松中重塑",vids:[
-  ["睡前助眠拉伸 10分钟（可选）","放松式拉伸，帮助睡眠","睡前拉伸 助眠"],
-  ["冥想呼吸 5分钟（可选）","顺便练专注力，一举两得","冥想 呼吸练习 5分钟"]]}
+const BODY_PLAN=[
+ {d:1,train:true,title:"训练日 · 脖子前倾 + 驼背",items:["欧阳春晓「脖子前倾矫正」跟练（B站）","靠墙站立收下巴 3 组×1分钟","胸椎伸展：猫牛式 10 次","弹力带扩胸开肩 15 次×3"]},
+ {d:2,train:true,title:"训练日 · 骨盆前倾 + 小肚子",items:["欧阳春晓「骨盆前倾矫正」跟练（B站）","死虫式核心激活 12 次×3","臀桥夹臀 15 次×3","腹式呼吸收紧小腹 5 分钟"]},
+ {d:3,train:false,title:"休息日 · 轻松放松",items:["泡沫轴放松全身 10 分钟","散步 / 拉伸即可，不给身体加压"]},
+ {d:4,train:true,title:"训练日 · 全身减脂跟练",items:["欧阳春晓「全身减脂」跟练（B站）","开合跳 30 秒×3","高抬腿 30 秒×3","拉伸放松 5 分钟"]}
 ];
-function getCycleStart(){let s=LS.get("cycleStart",null);if(!s){s=todayStr();LS.set("cycleStart",s)}return s}
-function setCycleStart(){LS.set("cycleStart",$("cycleStart").value);renderBody();renderDash()}
-function getBodyDay(){
-  const start=new Date(getCycleStart()+"T00:00:00"),now=new Date(todayStr()+"T00:00:00");
-  const diff=Math.max(0,Math.round((now-start)/864e5));
-  const idx=diff%4;const p=BODYPLAN[idx];
-  return {idx,short:p.short,plan:p.name+"（"+p.short+"）"};
-}
+function cycleDay(){const s=LS.get("cycleStart",null);if(!s)return ((Date.now()/86400000)|0)%4+1;const diff=Math.floor((Date.now()-new Date(s))/86400000);return (diff%4)+1;}
 function renderBody(){
-  $("cycleStart").value=getCycleStart();
-  const bd=getBodyDay();
-  const p=BODYPLAN[bd.idx];
-  const hits=LS.get("bodyHits",{});
-  $("bodyToday").innerHTML=`今天是 <b>${p.name}</b><br><span style="font-size:12.5px">${p.focus}</span>`;
-  $("ckBtn").textContent=hits[todayStr()]?"✅ 今日已打卡":"✅ 完成今日打卡";
-  $("bodyDays").innerHTML=BODYPLAN.map((d,i)=>`<div class="day-card ${i===bd.idx?"today":""}">
-    ${i===bd.idx?'<span class="d-tag">📍 今天</span>':""}
-    <div class="d-title">${d.name}</div>
-    <div class="d-focus">${d.focus}</div>
-    ${d.vids.map(v=>`<div class="vid-row"><div><div>${v[0]}</div><div class="vid-meta">${v[1]}</div></div><a href="${biliSearch(v[2])}" target="_blank">▶ 去跟练</a></div>`).join("")}
-  </div>`).join("");
-  /* streak */
-  const cells=[];let streak=0,checking=true;
-  for(let i=29;i>=0;i--){
-    const d=new Date();d.setDate(d.getDate()-i);
-    const ds=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-    cells.push(`<div class="streak-cell ${hits[ds]?"hit":""}" title="${ds}" onclick="togHit('${ds}')">${d.getDate()}</div>`);
-  }
-  for(let i=0;i<30;i++){const d=new Date();d.setDate(d.getDate()-i);
-    const ds=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-    if(hits[ds])streak++;else if(i>0||!hits[ds]&&i===0){if(i===0)continue;break}}
-  $("streakGrid").innerHTML=cells.join("");
-  $("streakNum").textContent=streak;
+  const cd=cycleDay();let html="";
+  BODY_PLAN.forEach((p,i)=>{
+    const dayIdx=((cd-1+i)%4)+1;const isToday=(dayIdx===cd);
+    const hit=LS.get("bodyHits",[]).includes(todayStr()+"-"+dayIdx);
+    html+=`<div class="day-card ${p.train?'train':''}">
+      <div class="dh"><b>第${dayIdx}天 ${p.title}</b>${isToday?`<span class="day-tag ${p.train?'':'rest'}">${p.train?'今日训练':'今日休息'}</span>`:''}</div>
+      <ul>${p.items.map(it=>`<li>${it}</li>`).join("")}</ul>
+      ${p.train&&isToday?`<div style="margin-top:10px"><a class="link" href="${biliSearch('欧阳春晓 体态矫正 跟练')}" target="_blank">▶ B站跟练视频</a> &nbsp; <span class="chk-day" onclick="hitBody(${dayIdx},'${hit}')">${hit?'✅ 已打卡':'○ 打卡今日'}</span></div>`:''}
+    </div>`;
+  });
+  html+='<div class="card tight"><div class="muted">四天三练循环：第1天脖子+驼背 · 第2天骨盆+小腹 · 第3天休息 · 第4天减脂。点「打卡今日」记录训练。</div><button class="btn ghost sm" style="margin-top:8px" onclick="resetCycle()">↺ 重新从第1天开始</button></div>';
+  $("bodyBox").innerHTML=html;
 }
-function checkinToday(){const h=LS.get("bodyHits",{});h[todayStr()]=true;LS.set("bodyHits",h);renderBody();renderDash()}
-function togHit(ds){const h=LS.get("bodyHits",{});if(h[ds])delete h[ds];else h[ds]=true;LS.set("bodyHits",h);renderBody()}
+function hitBody(day,already){
+  if(already==="true")return;
+  const k=todayStr()+"-"+day;const a=LS.get("bodyHits",[]);if(!a.includes(k))a.push(k);LS.set("bodyHits",a);renderBody();
+}
+function resetCycle(){LS.set("cycleStart",todayStr());renderBody();}
+
+/* ================= 体重管理 ================= */
+const WATER_TARGET=8,WATER_ML=250;
+function wHeight(){return LS.get("wHeight",null);}
+function wLog(){return LS.get("wLog",[]);}
+function wSaveRec(date,w,fat){
+  const a=wLog();const ex=a.findIndex(r=>r.date===date);
+  const r={date,weight:w,fat:isNaN(fat)||fat===""?null:fat};
+  if(ex>=0)a[ex]=r;else a.push(r);
+  a.sort((x,y)=>x.date.localeCompare(y.date));LS.set("wLog",a);
+}
+function saveWHeight(){const h=parseFloat($("wHeight").value);if(!h)return;LS.set("wHeight",h);renderWeight();}
+function saveWRec(){
+  const w=parseFloat($("wWeight").value);if(!w)return;
+  const f=parseFloat($("wFat").value);wSaveRec(todayStr(),w,f);
+  $("wWeight").value="";$("wFat").value="";renderWeight();
+}
+function addWater(n){
+  const k="water_"+todayStr();let v=LS.get(k,0)+n;if(v<0)v=0;LS.set(k,v);renderWeight();
+}
+function calcBMI(h,w){if(!h||!w)return null;return +(w/((h/100)*(h/100))).toFixed(1);}
+function renderWeight(){
+  const h=wHeight();const log=wLog();const last=log.length?log[log.length-1]:null;
+  $("wHeight")&&($("wHeight").value=h||"");
+  $("wNow").textContent=last?last.weight:"—";
+  $("fNow").textContent=last&&last.fat!=null?last.fat:"—";
+  $("bmiNow").textContent=(h&&last)?calcBMI(h,last.weight):"—";
+  const wk="water_"+todayStr();const wn=LS.get(wk,0);
+  if($("waterNum")){$("waterNum").textContent=wn;$("waterMl").textContent=(wn*WATER_ML)+" ml";}
+  // 月份选择
+  const months=[...new Set(log.map(r=>r.date.slice(0,7)))];
+  const curM=todayStr().slice(0,7);if(!months.includes(curM))months.push(curM);
+  months.sort().reverse();
+  const sel=$("monthSel");if(sel){sel.innerHTML=months.map(m=>`<option value="${m}" ${m===curM?'selected':''}>${m} 月</option>`).join("");}
+  const m=sel?sel.value:curM;
+  const ml=log.filter(r=>r.date.startsWith(m));
+  drawWeightChart(ml);
+  $("wLogList").innerHTML=ml.length?ml.slice().reverse().map(r=>`<div class="tea-log"><span><span class="nm">${r.date}</span> <span class="mt">${r.weight}kg${r.fat!=null?' · 体脂'+r.fat+'%':''}</span></span></div>`).join(""):'<div class="empty">本月还没有记录</div>';
+}
+function drawWeightChart(data){
+  const svg=$("weightChart");if(!svg)return;
+  if(!data.length){svg.innerHTML='<text x="160" y="90" text-anchor="middle" fill="#9aabba" font-size="13">暂无数据</text>';return;}
+  const W=320,H=180,pad=26;const weights=data.map(d=>d.weight);const fats=data.map(d=>d.fat).filter(x=>x!=null);
+  const allv=weights.concat(fats);const min=Math.min(...allv)-1,max=Math.max(...allv)+1;
+  const x=i=>pad+(W-2*pad)*i/(data.length-1||1);
+  const y=v=>H-pad-(H-2*pad)*(v-min)/(max-min||1);
+  let p1=data.map((d,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(d.weight).toFixed(1)}`).join(" ");
+  let p2="";if(fats.length===data.length)p2=data.map((d,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(d.fat).toFixed(1)}`).join(" ");
+  let dots=data.map((d,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(d.weight).toFixed(1)}" r="3" fill="#8fc6e0"/>`).join("");
+  svg.innerHTML=`<path d="${p1}" fill="none" stroke="#8fc6e0" stroke-width="2.5" stroke-linejoin="round"/>
+    ${p2?`<path d="${p2}" fill="none" stroke="#f3b3cd" stroke-width="2" stroke-dasharray="4 3"/>`:''}${dots}
+    <text x="${pad}" y="14" fill="#9aabba" font-size="10">体重(蓝)</text>
+    ${p2?`<text x="${W-pad}" y="14" text-anchor="end" fill="#eaa6c2" font-size="10">体脂(粉虚线)</text>`:''}`;
+}
 
 /* ================= 每日阅读 ================= */
-const ARTICLES={
-sell:[
- {t:"黄金三秒：如何让人停下滑动的手指",ps:["用户划走一条视频只需要0.8秒，而你只有3秒时间给出一个\"留下来的理由\"。绝大多数带货视频死在开头——不是产品不好，是开头太礼貌了。\"大家好，今天给大家推荐一款……\"这句话说完，80%的人已经走了。","好的钩子只有三种底层逻辑：反常识、损失感、结果前置。反常识是\"我劝你别买空气炸锅\"——明明是卖它的；损失感是\"还在用毛巾擦头发的人，头发都被你搓坏了\"；结果前置是先展示最惊艳的效果画面，再倒叙讲过程。三种钩子的共同点是：制造一个大脑无法忽略的信息缺口。","记住一个残酷的公式：开头的作用不是介绍产品，而是购买用户接下来的10秒钟。每一句话的唯一任务，就是让人愿意听下一句话。当你写完一条脚本，把第一句话删掉再读一遍——如果反而更有力了，说明原来的第一句是废话。"]},
- {t:"痛点不是列出来的，是\"演\"出来的",ps:["新手讲痛点：\"夏天出门很热很晒，很不方便。\"老手讲痛点：镜头里的人挤在正午的公交站，手当扇子扇，刘海汗湿贴在额头上，抬头看了一眼太阳，闭眼叹气。没有一个字说\"热\"，但每个观众都热了。","这就是\"展示，而非讲述\"（Show, don't tell）。大脑对场景的共情速度远快于对形容词的理解速度。\"很难受\"是一个需要翻译的抽象词，而\"汗湿的刘海\"是一个不需要翻译的画面。用户在你的画面里认出了自己，才会相信你的产品是为他准备的。","写痛点时问自己三个问题：这个难受发生在什么具体时间？什么具体地点？用户身体的哪个部位在难受？把答案拍出来。痛点越具体，用户越觉得\"这就是我\"；痛点越宽泛，用户越觉得\"关我什么事\"。"]},
- {t:"口播的节奏感：像聊天一样卖货",ps:["为什么有的人一开口你就想划走，有的人念广告你都能听完？差别不在音色，在节奏。背稿感是口播的头号杀手——匀速、无停顿、每个字都咬得标准，像新闻联播卖面膜，用户的大脑会自动把它归类为\"广告\"，然后关闭注意力。","聊天感的秘诀是\"不规则\"。重要的词放慢、加重，不重要的连接词加快带过；关键卖点前停顿半秒，制造期待；偶尔加入口语碎片——\"就是说\"、\"你知道吗\"、\"我真的\"——这些\"不完美\"恰恰是真实感的来源。写完脚本不要背，要先讲给一个朋友听，录下来，那个版本往往比照稿念的好十倍。","还有一个反直觉的技巧：语速可以快，但信息密度要低。一句话只装一个信息点。用户是躺在床上刷手机的，不是坐在教室里记笔记的。你说得越满，他记住的越少。"]},
- {t:"信任感的三块基石：人设、证据、承诺",ps:["用户下单前心里只有一个问题：\"我凭什么信你？\"回答这个问题的不是产品，是你。信任的第一块基石是人设的一致性——你不能今天是精致美妆博主，明天卖九块九的拖鞋。人设就是你的选品逻辑，用户关注你，本质是雇你替他把关。","第二块基石是证据的具体性。\"很好用\"是零证据，\"我用了37天，空瓶了这是第二瓶\"是证据；\"销量很好\"是零证据，\"这条链接三天卖了八千单，评论区你们自己翻\"是证据。证据的黄金标准是可验证——用户能自己查证的信息，说服力翻倍。","第三块基石是敢于承诺，包括敢说缺点。\"这个杯子保温一般，但夏天你要的是冰，它冰镇效果是真强\"——讲一个无关痛痒的缺点，换取核心卖点的全部信任，这是测评类账号百试不爽的心法。全是优点的产品介绍，用户一个字都不信。"]},
- {t:"从\"卖点\"到\"买点\"：用户视角的翻译术",ps:["商家给你的产品资料上写着：\"采用双层304不锈钢，真空镀铜工艺。\"如果你把这句话直接念出来，这条视频就废了。因为这是卖点——站在产品角度的描述；用户需要的是买点——站在他生活里的意义。翻译过来应该是：\"早上装的冰可乐，下午三点开盖，冰还没化完。\"","翻译公式很简单：每写下一个产品参数，就追问一句\"所以呢？\"双层不锈钢——所以呢？——保温保冷强——所以呢？——夏天随时喝到冰的——所以呢？——通勤路上、办公室、健身房，你比别人多一口冰爽。追问到出现具体生活画面为止，那个画面才是你该拍的内容。","高手甚至会把买点再翻译成身份认同：卖的不是喷雾水杯，是\"会把日子过得讲究的人\"；卖的不是瑜伽垫，是\"开始对自己负责的决定\"。参数打动大脑，画面打动情绪，认同打动钱包。"]},
- {t:"催单不尴尬：让下单成为顺理成章",ps:["很多新手到了视频结尾突然不好意思了，轻飘飘一句\"喜欢的可以看看链接\"——前面铺垫的所有情绪瞬间泄掉。催单不是乞求，是服务：用户已经心动了，你要做的是帮他消除最后的犹豫，给他一个\"现在就买\"的理由。","有效的催单=价格锚点+稀缺性+行动指令，三件套缺一不可。价格锚点：\"专柜99，今天直播间39\"；稀缺性要真实：\"这个价格就这两天，恢复原价我可不会提醒你们\"；行动指令要具体到动作：\"点左下角小黄车，选第二个链接\"。模糊的指令带来模糊的转化。","最后一个细节：催单的语气要笃定。\"应该还不错\"\"可以试试看\"这类不自信的措辞会传染——你都不确定，用户凭什么确定？换成\"闭眼入\"\"买回去不好用你来找我\"。你的确定感，就是用户的安全感。"]}
-],
-deep:[
- {t:"注意力是这个时代最贵的货币",ps:["我们这代人面对的是一场不对等的战争：屏幕对面是上千名工程师、心理学家和世界上最强的算法，他们的KPI只有一个——多留住你一分钟。而你只有一个疲惫的、进化自石器时代的大脑。所以刷到停不下来不是你的错，但夺回注意力是你的责任。","经济学家赫伯特·西蒙在五十年前就预言了这一切：\"信息的丰富将导致注意力的贫乏。\"信息不再稀缺，稀缺的是处理信息的能力。同样刷一小时抖音，有人是被动地被投喂，有人是带着选题库去狩猎——输入动作一样，人生走向完全不同。","注意力在哪里，生命就在哪里。你连续专注的时长，几乎决定了你能完成的事情的复杂度：15秒的注意力只能消费内容，15分钟可以学会一个技能点，2小时可以完成一件值得骄傲的作品。守住注意力，不是自律的苦行，而是对自己生命的定价权。"]},
- {t:"语言的质感：为什么读书的人说话不一样",ps:["同样是形容开心，有人只会说\"太开心了真的\"，有人会说\"那一瞬间，像有人把房间里的灯全部打开了\"。这就是语言的质感——它不是天赋，是输入的复利。你说出来的每一句话，都是你读过的所有句子的回声。","碎片信息给你的是词汇，深度阅读给你的是句式和思维结构。刷一百条视频，你收获一百个热梗，三个月后全部过期；读一篇好文章，你可能只记住一个比喻，但它会永久改变你组织语言的方式。热梗让你合群，质感让你被记住——对一个靠表达吃饭的创作者来说，后者才是护城河。","摘抄是最古老也最有效的方法，但关键在摘抄之后：把那个句子的结构拆出来，换上你自己的内容再造一句。比如\"生活不是等待暴风雨过去，而是学会在雨中跳舞\"，结构是\"不是被动等待A，而是主动在A中B\"。偷结构，不偷句子——这才是把别人的语言变成自己的唯一路径。"]},
- {t:"复利思维：每天1%的可怕之处",ps:["1.01的365次方约等于37.8，0.99的365次方约等于0.03。这道数学题被引用到泛滥，但大多数人只感动了三秒，因为他们误解了复利——复利的前半程慢得令人绝望。前三个月，每天进步1%的人和原地踏步的人几乎看不出区别，分化发生在那条曲线沉默的拐点之后。","大多数人放弃的原因不是不努力，而是在\"平台期\"误判了自己。学英语三个月没效果、健身两个月体重没变、做账号一个月没爆款——他们以为是方法错了，其实是曲线还没到拐点。复利最残忍也最公平的规则是：它先漫长地筛掉没有耐心的人，再把全部奖励发给留下来的人。","让复利生效有两个条件：方向不变，动作可积累。今天学剪辑明天学编程后天学画画，每一次切换都是清零重来；而每天一条视频、每天一页摘抄、每天一次跟练，看似笨拙，却在同一个方向上垒砖。选定一个赛道，然后把\"坚持\"变成\"不需要思考的日常\"——复利厌恶聪明的跳跃，偏爱愚蠢的重复。"]},
- {t:"心流：专注带来的深层快乐",ps:["心理学家米哈里·契克森米哈赖研究了几十年\"人什么时候最幸福\"，答案出人意料：不是躺着休息时，不是消费娱乐时，而是全神贯注做一件有挑战的事、忘记时间存在的时候。他把这种状态命名为\"心流\"。剪视频剪到抬头发现三小时过去了——那种奇异的满足感，就是心流。","进入心流有三个条件：目标清晰（知道这一步要做什么）、反馈即时（能立刻看到结果）、难度匹配（挑战略高于能力的4%）。刷短视频永远无法产生心流，因为它没有挑战；而太难的任务也不行，会直接触发焦虑。高手的做法是把大任务切成\"踮脚够得着\"的小块，让自己持续泡在心流区里。","心流还有一个被低估的作用：它是多巴胺系统的\"修复程序\"。短视频提供的是廉价而急促的快感脉冲，心流提供的是绵长而深厚的满足感。一个每天能进入一次心流的人，对碎片刺激的渴求会自然下降——对抗上瘾最好的方式，从来不是硬戒，而是用更高级的快乐降维打击。"]},
- {t:"费曼学习法：讲不清楚就是没学会",ps:["诺贝尔物理学奖得主费曼有一个朴素的判断标准：如果你不能把一个概念讲给一个八岁的孩子听懂，你就没有真正理解它。我们的大脑极擅长制造\"我懂了\"的幻觉——看完一篇干货点头如捣蒜，合上手机复述不出三句话。看懂，和能讲，中间隔着一整个学习过程。","费曼学习法只有四步：选一个概念；假装教给一个完全不懂的人；卡壳的地方就是你没懂的地方，回去重学；最后用更简单的语言重讲一遍。它有效的原理是：输出会暴露输入的漏洞。这对短视频创作者是天大的好消息——你的职业就是\"讲给别人听\"，每一条口播视频都是一次费曼练习。","把这个方法用到日常：每天读完文章，强迫自己用三句话讲给朋友听（或者对着镜头讲）；每学一个带货技巧，立刻用自己的话写进脚本。知识不是收藏进收藏夹就属于你，而是从你嘴里再次说出来时，才真正属于你。"]},
- {t:"延迟满足：棉花糖实验之后的人生",ps:["斯坦福大学著名的棉花糖实验：给孩子一颗棉花糖，告诉他忍住15分钟不吃就能得到第二颗。追踪几十年后发现，忍住的孩子后来的人生成就普遍更高。但这个实验最重要的后续发现很少有人提：能忍住的孩子并不是意志力更强，而是更会使用策略——他们唱歌、蒙眼睛、把棉花糖想象成云朵。","这个发现改写了自律的定义：自律不是咬牙硬扛的能力，而是设计环境的能力。刷手机停不下来，最蠢的办法是考验意志力，最聪明的办法是让手机物理消失——放到另一个房间，卸载重装成本高的APP。真正的高手从不和欲望正面搏斗，他们只是让欲望更难被触发。","短视频时代的悖论在于：作为创作者，你在生产即时满足；作为个人，你必须练习延迟满足。日更三个月才起号，跟练六周才有体态变化，摘抄一年才有语言质感——你账号里所有值钱的东西，都是延迟满足的产物。每次想放弃时提醒自己：即时满足给你今天的快乐，延迟满足给你明年的人生。"]}
-]};
-let readCat="sell";
-function artIndex(cat){
-  const off=LS.get("artOff_"+cat,0);
-  const dayN=Math.floor(Date.now()/864e5);
-  return (dayN+off)%ARTICLES[cat].length;
+let curRead="all";
+// ===== READ_START =====
+const READ=[
+ {cat:"copy",t:"爆款带货标题的「3秒钩子」公式",c:"开头用反差/痛点/好奇抛钩子，比平铺直叙点击率高 3 倍。常用结构：① 身份代入「脖子短的姐妹」；② 结果前置「这夹子救了我的扁头」；③ 质疑式「你还在这样扎头发？」。结尾一定给行动指令（点左下/评论扣字）。",s:"自整理"},
+ {cat:"deep",t:"为什么「具体」比「高级」更打动人",c:"文案里写「显脸小 3cm」比「超显脸小」可信度高得多。大脑对具体数字自动加信任分。带货、笔记、自我介绍都适用：把感受翻译成可感知的量化描述，是表达力的核心训练。",s:"表达力笔记"},
+ {cat:"copy",t:"情绪价值＞功能价值的 4 类话术",c:"① 被理解的痛：「我也曾天天掉发」；② 变好的期待：「坚持一周同事都问」；③ 身份认同：「精致女孩的标配」；④ 低风险承诺：「不满意随时退」。把卖点包进情绪里，转化率显著提升。",s:"话术库"},
+ {cat:"deep",t:"注意力稀缺时代的「慢」竞争力",c:"当所有人都在抢快，能让人停留 10 秒的「慢内容」（治愈、细节、过程）反而稀缺。做内容不必跟风加速，把一件事讲透、拍美，本身就是差异化。",s:"认知积累"},
+ {cat:"copy",t:"评论区运营：把观众变成共创者",c:"结尾留「你最上头哪个」「评论区扣 1 我出下期」，互动率直接拉高推流。爆款从来不是单向输出，而是用问题把观众拉进创作里。",s:"运营笔记"},
+ {cat:"deep",t:"体态好的人，镜头感为什么更松弛",c:"脖子前倾、含胸会传递「不自信」的非语言信号，观众潜意识会滑走。矫正体态不仅是健康，更是镜头表现力训练——身正，气就顺，话就稳。",s:"形体认知"}
+];
+// ===== READ_END =====
+function renderRead(r){
+  curRead=r||"all";
+  const list=READ.filter(a=>curRead==="all"||a.cat===curRead);
+  $("readList").innerHTML=list.length?list.map((a,i)=>`<div class="read-card">
+    <span class="rcat">${a.cat==='copy'?'带货文案素材':'深度知识积累'}</span>
+    <h4>${a.t}</h4><p>${a.c}</p>
+    <div class="read-acts"><span class="muted">来源：${a.s}</span>
+      <a class="link" href="javascript:void(0)" onclick="favRead('${esc(a.t)}','${esc(a.c)}')">💛 收藏到语句库</a></div>
+  </div>`).join(""):'<div class="empty">暂无内容</div>';
 }
-function renderArticle(){
-  const arr=ARTICLES[readCat];
-  const a=arr[artIndex(readCat)];
-  $("artTag").textContent=readCat==="sell"?"🎤 带货表达":"🌊 深度知识";
-  $("artDay").textContent="今日推荐 · "+todayStr();
-  $("artTitle").textContent=a.t;
-  $("artBody").innerHTML=a.ps.map(p=>`<p>${p}</p>`).join("");
-}
-function shuffleArticle(){LS.set("artOff_"+readCat,LS.get("artOff_"+readCat,0)+1);renderArticle()}
-$("readTabs").querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
-  $("readTabs").querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");
-  readCat=t.dataset.t;renderArticle();
-});
+$("readTabs").querySelectorAll(".pill").forEach(t=>t.onclick=()=>{$("readTabs").querySelectorAll(".pill").forEach(x=>x.classList.remove("on"));t.classList.add("on");renderRead(t.dataset.r);});
 
-/* ================= 划词收藏 ================= */
-let selText="";
-document.addEventListener("mouseup",e=>{
-  if(e.target.id==="selPop")return;
-  setTimeout(()=>{
-    const sel=window.getSelection();
-    const txt=sel?sel.toString().trim():"";
-    const inArt=sel&&sel.anchorNode&&$("artBody").contains(sel.anchorNode);
-    const pop=$("selPop");
-    if(txt.length>3&&inArt){
-      selText=txt;
-      const r=sel.getRangeAt(0).getBoundingClientRect();
-      pop.style.left=Math.max(10,r.left+r.width/2-50)+"px";
-      pop.style.top=(r.top-44)+"px";pop.style.display="block";
-    }else pop.style.display="none";
-  },10);
-});
-function collectSel(){
-  if(!selText)return;
-  const note=prompt("💭 写一句你的感悟（可留空）：","");
-  const qs=LS.get("quotes",[]);
-  qs.unshift({id:Date.now(),text:selText,note:note||"",src:$("artTitle").textContent,date:todayStr()});
-  LS.set("quotes",qs);$("selPop").style.display="none";selText="";
-  renderQuotes();renderDash();
-  window.getSelection().removeAllRanges();
-  alert("已收藏进语句库 💛");
-}
+/* ================= 我的语句库 ================= */
+function myQuotes(){return LS.get("myQuotes",[]);}
+function favRead(t,c){const q=myQuotes();q.unshift({id:uid(),text:"《"+t+"》"+c.slice(0,40)+"…",from:t});LS.set("myQuotes",q);alert("已收藏到语句库 💬");}
+function addQuote(){const v=$("quoteInput").value.trim();if(!v)return;const q=myQuotes();q.unshift({id:uid(),text:v,from:"手动添加"});LS.set("myQuotes",q);$("quoteInput").value="";renderQuotes();}
+function delQuote(id){LS.set("myQuotes",myQuotes().filter(q=>q.id!==id));renderQuotes();}
 function renderQuotes(){
-  const kw=($("qSearch").value||"").trim();
-  let qs=LS.get("quotes",[]);
-  if(kw)qs=qs.filter(q=>q.text.includes(kw)||q.note.includes(kw)||q.src.includes(kw));
-  $("quoteList").innerHTML=qs.length?qs.map(q=>`<div class="quote-card">
-    <div class="quote-txt">"${esc(q.text)}"</div>
-    ${q.note?`<div class="quote-note">💭 ${esc(q.note)}</div>`:""}
-    <div class="quote-meta"><span>《${esc(q.src)}》 · ${q.date}</span><span class="del-x" onclick="delQuote(${q.id})">×</span></div>
-  </div>`).join(""):'<div class="empty">语句库还是空的。去「每日阅读」选中打动你的句子，点收藏 💛</div>';
-}
-function delQuote(id){if(!confirm("删除这条摘抄？"))return;LS.set("quotes",LS.get("quotes",[]).filter(x=>x.id!==id));renderQuotes();renderDash()}
-
-/* ================= 番茄钟 ================= */
-let pomoLeft=25*60,pomoTotal=25*60,pomoRun=false,pomoTimer=null,pomoMode="focus";
-function pomoDraw(){
-  const m=String(Math.floor(pomoLeft/60)).padStart(2,"0"),s=String(pomoLeft%60).padStart(2,"0");
-  $("pomoTime").textContent=m+":"+s;
-  const pct=100-(pomoLeft/pomoTotal*100);
-  $("pomoRing").style.background=`conic-gradient(${pomoMode==="focus"?"var(--accent)":"var(--accent2)"} ${pct}%,#f0e6da ${pct}%)`;
-  $("pomoState").textContent=pomoMode==="focus"?(pomoRun?"专注中…手机放远点":"准备开始"):"休息中，站起来动一动";
-}
-function pomoToggle(){
-  pomoRun=!pomoRun;
-  $("pomoBtn").textContent=pomoRun?"⏸ 暂停":"▶ 继续";
-  if(pomoRun){pomoTimer=setInterval(()=>{
-    pomoLeft--;
-    if(pomoLeft<=0){
-      clearInterval(pomoTimer);pomoRun=false;
-      if(pomoMode==="focus"){
-        const k="pomo_"+todayStr();LS.set(k,LS.get(k,0)+1);$("pomoCount").textContent=LS.get(k,0);
-        alert("🍅 完成一个番茄！休息5分钟吧");
-        pomoMode="rest";pomoTotal=pomoLeft=5*60;
-      }else{alert("休息结束，开始下一轮 💪");pomoMode="focus";pomoTotal=pomoLeft=25*60}
-      $("pomoBtn").textContent="▶ 开始专注";
-    }
-    pomoDraw();
-  },1000)}else clearInterval(pomoTimer);
-  pomoDraw();
-}
-function pomoReset(){clearInterval(pomoTimer);pomoRun=false;pomoMode="focus";pomoTotal=pomoLeft=25*60;$("pomoBtn").textContent="▶ 开始专注";pomoDraw()}
-
-/* ================= 专注挑战 ================= */
-const FOCUSCHK=["🍽️ 吃饭时不看手机（一餐即可）","📵 工作/剪辑时手机放到另一个房间","🎯 刷抖音前先说出今天的目的（找选题/BGM）","📖 完成15分钟每日阅读不摸手机","🌙 睡前1小时不刷短视频"];
-function renderFocusChk(){
-  const k="fchk_"+todayStr();const st=LS.get(k,{});
-  $("focusChk").innerHTML=FOCUSCHK.map((c,i)=>`<label class="chk-row ${st[i]?"ck":""}">
-    <input type="checkbox" ${st[i]?"checked":""} onchange="togFchk(${i})"> ${c}</label>`).join("");
-}
-function togFchk(i){const k="fchk_"+todayStr();const st=LS.get(k,{});st[i]=!st[i];LS.set(k,st);renderFocusChk()}
-
-/* ================= 初始化 ================= */
-function init(){
-  renderDash();renderTasks();renderHot("gesture");renderDailyGoods();renderHair();
-  renderProds();renderScripts();renderReviews();renderProdStats();
-  $("sumNote").value=LS.get("sumNote","");
-  $("rvDate").value=todayStr();
-  renderBody();renderWeight();renderArticle();renderQuotes();renderFocusChk();
-  $("pomoCount").textContent=LS.get("pomo_"+todayStr(),0);pomoDraw();
-  detectSelfSync();startupSync();
-  showSplash();
-}
-init();
-
-/* ================= 数据备份 / 同步（导出导入 JSON，跨设备手动同步） ================= */
-function exportData(){
-  const fixed=["tasks","prods","scripts","reviews","quotes","bodyHits","sumNote","cycleStart","focusChk","wHeight","wLog"];
-  const dayKeys=["pomo_"+todayStr(),"water_"+todayStr()];
-  const d={};
-  fixed.forEach(k=>{const raw=localStorage.getItem(k);if(raw!==null){try{d[k]=JSON.parse(raw)}catch(e){d[k]=raw}}});
-  dayKeys.forEach(k=>{const raw=localStorage.getItem(k);if(raw!==null){try{d[k]=JSON.parse(raw)}catch(e){d[k]=raw}}});
-  const blob=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="牙牙工作台_备份_"+todayStr()+".json";a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
-}
-function importData(e){
-  const f=e.target.files[0];if(!f){return;}
-  const r=new FileReader();
-  r.onload=()=>{
-    try{
-      const d=JSON.parse(r.result);
-      if(!confirm("导入将覆盖当前同名数据（任务/选品/语句库/复盘等）。确定继续？")){e.target.value="";return;}
-      Object.keys(d).forEach(k=>localStorage.setItem(k,JSON.stringify(d[k])));
-      alert("✅ 导入成功，正在刷新…");location.reload();
-    }catch(err){alert("文件解析失败："+err.message);e.target.value=""}
-  };
-  r.readAsText(f);
+  const q=myQuotes();
+  $("quoteList").innerHTML=q.length?q.map(x=>`<div class="quote-item"><div class="qt">${esc(x.text)}</div><div class="from">— ${esc(x.from)} <span class="del" onclick="delQuote('${x.id}')">🗑</span></div></div>`).join(""):'<div class="empty">还没有收藏，去每日阅读点「💛 收藏」吧</div>';
 }
 
-// 启动时若已连接云端，拉取最新数据并刷新
-if(syncEnabled()){
-  if($("syncStatus"))$("syncStatus").textContent="☁️ 已连接，自动同步中";
-  pullData().then(()=>refreshAll()).catch(e=>console.warn("auto pull failed",e));
+/* ================= 专注力提升 ================= */
+let fMode=25,fLeft=25*60,fTimer=null,fRunning=false;
+function setMode(m,el){fMode=m;$("fTimer").textContent=fmt(m*60);fLeft=m*60;document.querySelectorAll("#pg-focus .timer-mode .pill").forEach(p=>p.classList.remove("on"));el.classList.add("on");}
+function fmt(s){const m=Math.floor(s/60),ss=s%60;return String(m).padStart(2,"0")+":"+String(ss).padStart(2,"0");}
+function toggleFocus(){
+  if(fRunning){clearInterval(fTimer);fRunning=false;$("fBtn").textContent="继续";return;}
+  fRunning=true;$("fBtn").textContent="暂停";
+  fTimer=setInterval(()=>{fLeft--;if(fLeft<=0){clearInterval(fTimer);fRunning=false;$("fBtn").textContent="完成 🎉";addFocusMin(fMode);renderFocusStat();fLeft=fMode*60;$("fTimer").textContent=fmt(fLeft);return;}$("fTimer").textContent=fmt(fLeft);},1000);
+}
+function addFocusMin(m){const k="fchk_"+todayStr();const a=LS.get(k,[]);a.push(m);LS.set(k,a);}
+function renderFocusStat(){const a=LS.get("fchk_"+todayStr(),[]);const sum=a.reduce((x,y)=>x+y,0);$("fStat").textContent="今日已专注 "+sum+" 分钟";}
+
+/* ================= 奶茶记账 ================= */
+const TEA_BRANDS={
+ "蜜雪冰城":[{n:"珍珠奶茶",p:4,k:300},{n:"柠檬水",p:4,k:120},{n:"摇摇奶昔",p:8,k:350}],
+ "喜茶":[{n:"多肉葡萄",p:19,k:340},{n:"芝芝莓莓",p:21,k:360},{n:"满杯红柚",p:18,k:280}],
+ "奈雪的茶":[{n:"霸气草莓",p:22,k:330},{n:"杨枝甘露",p:23,k:370},{n:"鸭屎香宝藏茶",p:18,k:300}],
+ "茶百道":[{n:"杨枝甘露",p:16,k:320},{n:"茉莉奶绿",p:12,k:260},{n:"豆乳玉麒麟",p:17,k:340}],
+ "古茗":[{n:"超A芝士葡萄",p:15,k:330},{n:"云岭茉莉",p:10,k:240},{n:"芝士桃桃",p:14,k:310}],
+ "霸王茶姬":[{n:"伯牙绝弦",p:16,k:290},{n:"花田乌龙",p:15,k:270},{n:"青青糯山",p:17,k:320}]
+};
+const TEA_ADDON=[{n:"珍珠",k:60,p:2},{n:"椰果",k:40,p:2},{n:"芋圆",k:80,p:3},{n:"布丁",k:90,p:3},{n:"奶盖",k:120,p:4},{n:"燕麦",k:50,p:2}];
+function renderTea(){
+  const brands=Object.keys(TEA_BRANDS);
+  $("teaBrand").innerHTML=brands.map(b=>`<span class="pill" data-b="${b}" onclick="selTeaBrand('${b}',this)">${b}</span>`).join("");
+  $("teaAddon").innerHTML=TEA_ADDON.map(a=>`<span class="pill" data-a="${a.n}" onclick="toggleAddon('${a.n}',this)">＋${a.n}</span>`).join("");
+  selTeaBrand(brands[0],$("teaBrand").firstChild);
+  renderTeaLog();
+}
+function selTeaBrand(b,el){
+  document.querySelectorAll("#teaBrand .pill").forEach(p=>p.classList.remove("on"));if(el)el.classList.add("on");
+  window._teaBrand=b;
+  $("teaDrink").innerHTML=TEA_BRANDS[b].map(d=>`<option value="${d.n}">${d.n}（约¥${d.p}）</option>`).join("");
+  calcTea();
+}
+let _addons=[];
+function toggleAddon(n,el){el.classList.toggle("on");if(el.classList.contains("on"))_addons.push(n);else _addons=_addons.filter(x=>x!==n);calcTea();}
+function calcTea(){
+  const b=window._teaBrand;if(!b)return;
+  const drink=TEA_BRANDS[b].find(d=>d.n===$("teaDrink").value);
+  if(!drink)return;
+  const sweet=parseFloat($("teaSweet").value);
+  let k=Math.round(drink.k*sweet),p=drink.p;
+  _addons.forEach(n=>{const a=TEA_ADDON.find(x=>x.n===n);if(a){k+=a.k;p+=a.p;}});
+  $("teaKcal").textContent=k+" kcal";
+  $("teaPrice").textContent="约 ¥ "+p;
+  $("teaName").textContent=b+" · "+drink.n;
+  window._teaCur={brand:b,drink:drink.n,kcal:k,price:p};
+}
+function logTeaFromQuery(){
+  if(!window._teaCur)return;
+  const c=window._teaCur;const log=LS.get("teaLog",[]);
+  log.push({id:uid(),brand:c.brand,drink:c.drink,price:c.price,date:todayStr()});
+  LS.set("teaLog",log);renderTeaLog();alert("已记一笔 🧋");
+}
+function renderTeaLog(){
+  const m=todayStr().slice(0,7);const log=LS.get("teaLog",[]).filter(r=>r.date.startsWith(m));
+  const count=log.length,spend=log.reduce((s,r)=>s+r.price,0);
+  $("teaCount").textContent=count;$("teaSpend").textContent="¥"+spend;
+  const all=LS.get("teaLog",[]).slice().reverse();
+  $("teaLogList").innerHTML=all.length?all.map(r=>`<div class="tea-log"><span><span class="nm">${r.brand}·${r.drink}</span><br><span class="mt">${r.date}</span></span><span style="color:#e07ba0;font-weight:700">¥${r.price}</span></div>`).join(""):'<div class="empty">还没有奶茶记录</div>';
 }
 
-/* ================= 云端自动同步 ================= */
+/* ================= 云端同步 ================= */
 const SYNC_PASS="wb-sync-2026-x7";
 function syncCfg(){return LS.get("syncCfg",null);}
 function syncOn(){const c=syncCfg();return !!(c&&c.type&&c.url);}
 function allData(){
-  const keys=["tasks","prods","scripts","reviews","quotes","bodyHits","sumNote","cycleStart","focusChk","wHeight","wLog"];
-  for(let i=0;i<localStorage.length;i++){
-    const k=localStorage.key(i);
-    if(!k)continue;
-    if(k.startsWith("pomo_")||k.startsWith("water_")||k.startsWith("fchk_"))keys.push(k);
-  }
+  const keys=["tasks","myProds","scripts","reviews","benchmarks","bodyHits","cycleStart","myQuotes","wHeight","wLog","teaLog","syncCfg"];
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(!k)continue;if(k.startsWith("water_")||k.startsWith("fchk_"))keys.push(k);}
   const d={};keys.forEach(k=>{const v=localStorage.getItem(k);if(v!==null){try{d[k]=JSON.parse(v)}catch(e){d[k]=v}}});return d;
 }
 function schedulePush(){if(!syncOn())return;clearTimeout(_syncTimer);_syncTimer=setTimeout(pushData,800);}
-async function pushData(){
-  const c=syncCfg();if(!c||!c.url)return;
-  try{
-    if(c.type==="self"){
-      const r=await fetch(c.url,{method:"POST",headers:{"Content-Type":"application/json","x-sync-pass":c.key},body:JSON.stringify({data:allData()})});
-      if(!r.ok)console.warn("self push failed",r.status);
-    }else{
-      const r=await fetch(c.url+"/rest/v1/sync",{method:"POST",headers:{"Content-Type":"application/json","apikey":c.key,"Authorization":"Bearer "+c.key,"Prefer":"resolution=merge-duplicates"},body:JSON.stringify({id:1,data:allData(),updated_at:new Date().toISOString()})});
-      if(!r.ok)console.warn("supabase push failed",r.status);
-    }
-  }catch(e){console.warn("sync push error",e);}
-}
-async function pullData(){
-  const c=syncCfg();if(!c||!c.url)return;
-  let d=null;
-  if(c.type==="self"){
-    const r=await fetch(c.url+"?t="+Date.now(),{headers:{"x-sync-pass":c.key}});
-    if(!r.ok)throw new Error("拉取失败 "+r.status);
-    const j=await r.json();d=j.data||{};
-  }else{
-    const r=await fetch(c.url+"/rest/v1/sync?select=data&id=eq.1",{headers:{"apikey":c.key,"Authorization":"Bearer "+c.key}});
-    if(!r.ok)throw new Error("拉取失败 "+r.status);
-    const arr=await r.json();if(arr&&arr[0]&&arr[0].data)d=arr[0].data;
-  }
+async function pushData(){const c=syncCfg();if(!c||!c.url)return;try{
+  if(c.type==="self"){const r=await fetch(c.url,{method:"POST",headers:{"Content-Type":"application/json","x-sync-pass":c.key},body:JSON.stringify({data:allData()})});if(!r.ok)console.warn("self push failed",r.status);}
+  else{const r=await fetch(c.url+"/rest/v1/sync",{method:"POST",headers:{"Content-Type":"application/json","apikey":c.key,"Authorization":"Bearer "+c.key,"Prefer":"resolution=merge-duplicates"},body:JSON.stringify({id:1,data:allData(),updated_at:new Date().toISOString()})});if(!r.ok)console.warn("supabase push failed",r.status);}
+}catch(e){console.warn("sync push error",e);}}
+async function pullData(){const c=syncCfg();if(!c||!c.url)return;let d=null;
+  if(c.type==="self"){const r=await fetch(c.url+"?t="+Date.now(),{headers:{"x-sync-pass":c.key}});if(!r.ok)throw new Error("拉取失败 "+r.status);const j=await r.json();d=j.data||{};}
+  else{const r=await fetch(c.url+"/rest/v1/sync?select=data&id=eq.1",{headers:{"apikey":c.key,"Authorization":"Bearer "+c.key}});if(!r.ok)throw new Error("拉取失败 "+r.status);const arr=await r.json();if(arr&&arr[0]&&arr[0].data)d=arr[0].data;}
   if(d)Object.keys(d).forEach(k=>localStorage.setItem(k,JSON.stringify(d[k])));
 }
-function refreshAll(){if(window.renderTasks){renderTasks();renderDash();renderProds();renderProdStats();renderQuotes();renderBody();renderWeight();renderFocusChk();}}
-async function enableSelfSync(){
-  LS.set("syncCfg",{type:"self",url:"/api/sync",key:SYNC_PASS});
-  try{await pullData();if($("syncStatus"))$("syncStatus").textContent="☁️ 已连接内置云端，自动同步中";alert("✅ 已启用！手机和电脑现在自动共用一份数据，无需任何账号。");refreshAll();}
-  catch(e){LS.set("syncCfg",null);alert("启用失败："+e.message);}
-}
-async function connectSync(){
-  const url=$("sbUrl").value.trim(),key=$("sbKey").value.trim();
-  if(!url||!key){alert("请填写 Project URL 和 Anon Key");return;}
-  LS.set("syncCfg",{type:"supabase",url,key});
-  try{await pullData();if($("syncStatus"))$("syncStatus").textContent="☁️ 已连接 Supabase，自动同步中";alert("✅ 已连接！现在手机和电脑会自动同步。");refreshAll();}
-  catch(e){LS.set("syncCfg",null);alert("连接失败："+e.message);}
-}
-function disconnectSync(){LS.set("syncCfg",null);if($("syncStatus"))$("syncStatus").textContent="当前：未连接";alert("已断开云端同步");}
-function copySql(){
-  const sql='create table if not exists sync (\n  id int primary key,\n  data jsonb,\n  updated_at timestamptz default now()\n);\nalter table sync enable row level security;\ncreate policy "anon_all" on sync for all using (true) with check (true);';
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(sql).then(()=>alert("已复制 SQL，去 Supabase → SQL Editor 粘贴运行即可")).catch(()=>prompt("复制下面这段到 Supabase SQL Editor 运行：",sql));}
-  else prompt("复制下面这段到 Supabase SQL Editor 运行：",sql);
-}
-// 检测内置云端是否可用（仅当后端返回真正的 {ok:true} 才显示）
-function detectSelfSync(){
-  fetch("/api/sync?probe=1").then(r=>r.json()).then(j=>{
-    const w=document.getElementById("selfSyncWrap");
-    if(w)w.style.display=(j&&j.ok)?"":"none";
-  }).catch(()=>{const w=document.getElementById("selfSyncWrap");if(w)w.style.display="none";});
-}
-// 启动时若已配置同步，则拉取一次以合并最新数据
-async function startupSync(){
-  if(!syncOn())return;
-  try{await pullData();refreshAll();if($("syncStatus"))$("syncStatus").textContent="☁️ 已连接，自动同步中";}catch(e){console.warn("startup pull failed",e);}
+function refreshAll(){renderPlan();renderHot(curHot);renderSell(curSell);renderBody();renderWeight();renderRead(curRead);renderQuotes();renderTea();renderFocusStat();}
+async function startupSync(){if(!syncOn())return;try{await pullData();refreshAll();}catch(e){console.warn("startup pull failed",e);}}
+function exportData(){
+  const d=allData();const blob=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="牙牙的工作台_备份_"+todayStr()+".json";a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
 }
 
-/* ================= PWA：注册 Service Worker（可离线 / 加到主屏） ================= */
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{})});
+/* ================= 启动 ================= */
+function init(){
+  const now=new Date();
+  $("topDate").textContent=`${now.getMonth()+1}月${now.getDate()}日 周${WD[now.getDay()]}`;
+  document.querySelector('#navList .nav-item[data-pg="plan"]').classList.add("active");
+  document.getElementById("pg-plan").classList.add("show");
+  renderPlan();renderHot("gesture");renderSell("goods");renderBody();renderWeight();
+  renderRead("all");renderQuotes();renderFocusStat();renderTea();
+  showSplash();
+  startupSync();
 }
+init();
+
+/* PWA */
+if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{});});}
 </script>
 </body>
 </html>
